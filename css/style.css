@@ -43,9 +43,9 @@ input[type="text"] {
 }
 
 #vsText{
+	margin: 0 auto;
 	text-align: center;
-	height: 75%;
-	line-height: 75%;
+	vertical-align: middle;
 	font-family: 'Cormorant Garamond', serif;
 	font-size: 48px;
 }
