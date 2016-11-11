@@ -1,0 +1,1 @@
+const Store = { users: [], heroes: []}
