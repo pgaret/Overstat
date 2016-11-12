@@ -1,11 +1,20 @@
+@font-face{
+	font-family: "Big Noodle Titling Oblique";
+	src: url('big_noodle_titling_oblique.ttf');
+}
+@font-face{
+	font-family: "Big Noodle Titling";
+	src: url('big_noodle_titling.ttf');
+}
+
 html {
 	background: #827984; /* Old browsers */
 	background: -moz-linear-gradient(top,  #827984 0%, #5A8184 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#827984), color-stop(100%,#5A8184)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #827984 0%,#5A8184 100%); /* Chrome10+,Safari5.1+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(51,0,0)), color-stop(100%,rgb(100, 116, 94))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgb(51,0,0) 0%, rgb(100, 116, 94) 100%); /* Chrome10+,Safari5.1+ */
 	background: -o-linear-gradient(top,  #827984 0%,#5A8184 100%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(top,  #827984 0%,#5A8184 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #827984 0%,#5A8184 100%); /* W3C */
+	background: linear-gradient(to bottom,  rgb(199, 175, 156) 0%,rgb(118,115,111) 100%); /* W3C */
 	background-size: cover;
 	height: 100%;
 	min-height: 100%;
@@ -14,50 +23,86 @@ html {
 body {
 	font-family: Helvetica, Arial, sans-serif;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#827984', endColorstr='#5A8184',GradientType=0 ); /* IE6-9 */
-	color:#000;
+	background-image: url('css/overwatch-logo.jpg');
 }
 
 form {
-	position: relative;
 	border:1px solid #333;
-	background: rgba(255,255,255,.75);
+	background: rgb(170, 170, 170);
 	padding: 3%;
 	border-radius:5px;
 	box-shadow: 2px 5px 5px #333;
-
-	margin: 10% auto;
+	margin: 15% auto;
 	width:75%;
 	padding: 3%;
 }
 
 input[type="text"] {
 	display: inline-block;
+	margin: auto;
 	padding: 3%;
 	width: 30%;
-	margin: auto;
-	font-size:14px;
 	border:1px solid #666;
 	border-radius:5px;
 	background: #fff;
 	box-shadow: 2px 2px 0px #666;
+
+	font-size: 2.25vw;
+	font-family: "Big Noodle Titling";
+	text-align: center;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-size: 2.25vw;
+	font-family: "Big Noodle Titling";
+	/*font-family: 'Open Sans', sans-serif;*/
+	/*padding: 2%;*/
+	/*margin: auto;*/
+	text-align: center;
+	vertical-align: middle;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  font-size: 32px;
+	padding: 2%;
+	margin: auto;
+	text-align: center;
+	vertical-align: middle;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  font-size: 24px;
+	padding: 2%;
+	margin: auto;
+	text-align: center;
+	vertical-align: middle;
+}
+:-moz-placeholder { /* Firefox 18- */
+  font-size: 24px;
+	padding: 2%;
+	margin: auto;
+	text-align: center;
+	vertical-align: middle;
 }
 
 #vsText{
-	margin: 0 auto;
+	margin: auto;
 	text-align: center;
 	vertical-align: middle;
-	font-family: 'Cormorant Garamond', serif;
-	font-size: 48px;
+	padding: 2%;
+	width: 5%;
+	font-family: "Big Noodle Titling Oblique";
+	font-size: 3vw;
 }
 
 input[type="submit"]{
 	display: inline;
-	width: 25%;
-	padding: 1% 3%;
+	width: 10%;
+	margin: 2%;
+	padding: 2%;
 	border:1px solid #333;
-	color:#000;
 	border-radius:5px;
 	box-shadow: 2px 2px 0px #666;
-	font-weight:bold;
-	font-size:14px;
+
+	font-size: 2.25vw;
+	font-family: "Big Noodle Titling";
+	color:#000;
 }
