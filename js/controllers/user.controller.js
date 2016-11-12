@@ -3,10 +3,12 @@ angular.module('overwatch_project').controller(
   $(function(){
     $("form").submit(function(){
       event.preventDefault()
-      name = $("#inputUser1").val().replace("#", "-")
-      $scope.user = new User()
-      $scope.user.load(name)
-      $("#inputUser1").val("")
+      user1 = $("#inputUser1").val().replace("#", "-")
+      if ($("#inputUser2").val() !== ""){
+        user2 = $("#inputUser2").val().replace("#", "-")
+      }
+      $scope.user1 = new User(user1)
+      $scope.user2 = new User(user2)
       $("#add_user").css("margin", "0 auto")
     })
   })

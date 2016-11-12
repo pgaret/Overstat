@@ -16,22 +16,22 @@
 
     <form id="add_user" class="" action="#" method="post">
       <input id="inputUser1" type="text" placeholder="Battletag#1234">
-      <span id="vsText"> vs </span>
+      <span ng-if="user1" id="vsText"> vs </span>
       <input id="inputUser2" type="text" placeholder="Battletag#1234">
       <input type="submit" name="name" value="Search">
     </form>
 
-    <p id="battletag" class="gradient">{{user.battletag}}</p>
+    <p id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
-    <table ng-if="user">
-      <tr ng-repeat="(stat, val) in user.game_stats">
+    <table ng-if="user1" ng-if="user2">
+      <tr ng-repeat="(stat, val) in user1.average_data">
         <td>{{stat}}</td>
         <td>{{val}}</td>
       </tr>
     </table>
-    
-    <table ng-if="user">
-      <tr ng-repeat="(stat, val) in user.game_stats">
+
+    <table ng-if="user2">
+      <tr ng-repeat="(stat, val) in user2.average_data">
         <td>{{stat}}</td>
         <td>{{val}}</td>
       </tr>
