@@ -106,3 +106,31 @@ input[type="submit"]{
 	font-family: "Big Noodle Titling";
 	color:#000;
 }
+
+#battletag{
+	font-size: 6vw;
+	font-family: "Big Noodle Titling Oblique";
+	color: rgb(241,156,67);
+
+	margin: 5% auto;
+	text-align: center;
+}
+
+#battletag.gradient{
+	background: -webkit-linear-gradient(top, rgb(229,228,230), rgb(238,128,49));
+	background: linear-gradient(top, #878787, #000);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+table{
+	width: 45%;
+	text-align: center;
+	display: inline-block;
+}
+
+td{
+	padding: 2% 5%;
+	font-size: 2.5vw;
+	font-family: "Big Noodle Titling";
+}

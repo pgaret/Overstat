@@ -20,8 +20,22 @@
       <input id="inputUser2" type="text" placeholder="Battletag#1234">
       <input type="submit" name="name" value="Search">
     </form>
-    <p id="genData">{{user}}</p>
-    <p id="battletag">{{user.battletag}}</p>
+
+    <p id="battletag" class="gradient">{{user.battletag}}</p>
+
+    <table ng-if="user">
+      <tr ng-repeat="(stat, val) in user.game_stats">
+        <td>{{stat}}</td>
+        <td>{{val}}</td>
+      </tr>
+    </table>
+    
+    <table ng-if="user">
+      <tr ng-repeat="(stat, val) in user.game_stats">
+        <td>{{stat}}</td>
+        <td>{{val}}</td>
+      </tr>
+    </table>
 
       <script src="js/lib/jquery-2.1.1.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>

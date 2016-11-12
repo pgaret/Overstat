@@ -2,6 +2,7 @@ angular.module('overwatch_project').factory('User', ['$http', function($http){
 
   function User(userData){
     this.setData(userData)
+    Store.users.push(this)
   }
 
   User.prototype = {
