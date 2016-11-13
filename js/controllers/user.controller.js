@@ -55,7 +55,26 @@ angular.module('overwatch_project').controller(
     $scope.a_game_keys = a_game_keys
     $scope.a_avg_keys = a_avg_keys
 
-    //to remove _ for display use .replace(/\_/g,' ')
+    //to remove _ for display use
+//     for(var key in x) {
+//     if(x.hasOwnProperty(key)) {
+//         key = key.replace(/\_/g,' ')
+//     }
+// }
+
+// function renameKeys (dict, keyMap) {
+//   return _.reduce(dict, function (newDict, val, oldKey) {
+//     var newKey
+//     if (keyMap[oldKey]) {
+//       newKey = keyMap[oldKey]
+//     } else {
+//       newKey = oldKey
+//     }
+//     newDict[newKey] = val
+//     return newDict
+//   }, {})
+// }
+
 
     for (let i = 0; i < a_game_keys.length; i++){
       if (!user1gk.includes(a_game_keys[i])){
