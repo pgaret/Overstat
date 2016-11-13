@@ -55,6 +55,8 @@ angular.module('overwatch_project').controller(
     $scope.a_game_keys = a_game_keys
     $scope.a_avg_keys = a_avg_keys
 
+    //to remove _ for display use .replace(/\_/g,' ')
+
     for (let i = 0; i < a_game_keys.length; i++){
       if (!user1gk.includes(a_game_keys[i])){
         $scope.user1.game_stats[a_game_keys[i]] = "n/a"
@@ -70,8 +72,7 @@ angular.module('overwatch_project').controller(
       }
       if (!user2ak.includes(a_avg_keys[i])){
         $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
-      }    }
-
+      }
+    }
   }
-
 }])
