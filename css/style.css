@@ -36,6 +36,12 @@ form {
 	padding: 3%;
 }
 
+.error_message{
+	font-family: "Big Noodle Titling";
+	color: red;
+	font-size: 2vw;
+}
+
 input[type="text"] {
 	display: inline-block;
 	margin: auto;
@@ -47,13 +53,12 @@ input[type="text"] {
 	box-shadow: 2px 2px 0px #666;
 
 	font-size: 2.25vw;
-	font-family: "Big Noodle Titling";
 	text-align: center;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   font-size: 2.25vw;
-	font-family: "Big Noodle Titling";
+	/*font-family: "Big Noodle Titling";*/
 	/*font-family: 'Open Sans', sans-serif;*/
 	/*padding: 2%;*/
 	/*margin: auto;*/
