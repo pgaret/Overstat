@@ -141,3 +141,11 @@ td{
 	font-size: 2.5vw;
 	font-family: "Big Noodle Titling";
 }
+
+#stat{
+	text-align: left;
+}
+
+#val{
+	text-align: right;
+}

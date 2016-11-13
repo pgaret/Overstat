@@ -7,6 +7,7 @@ angular.module('overwatch_project').controller(
   $(function(){
     //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
     $("form").submit(function(){
+      $("form").css("margin", "0 auto")
       event.preventDefault()
       createUsers()
     })

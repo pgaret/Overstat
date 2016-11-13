@@ -47,24 +47,18 @@
         <option>Zenyatta</option>
       </select>
     </form>
-    <div ng-if="user2">
-      <p id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
-      <p id="battletag" class="gradient">{{user1.fullyLoaded}} vs {{user2.fullyLoaded}}</p>
-    </div>
-
-    <div ng-if="!user2">
-      <p id="battletag" class="gradient">{{user1.battletag}}</p>
-    </div>
 
     <div class="average_data">
 
+      <p id="battletag" class="gradient">{{user1.battletag}}</p>
       <table ng-if="user1">
         <tr ng-repeat="stat in a_game_keys">
-          <td>{{stat}}</td>
-          <td>{{user1.game_stats[stat]}}</td>
+          <td id="stat">{{stat}}</td>
+          <td id="val">{{user1.game_stats[stat]}}</td>
         </tr>
       </table>
 
+      <p ng-if="user2" id="battletag" class="gradient">{{user2.battletag}}</p>
       <table ng-if="user2">
         <tr ng-repeat="stat in a_game_keys">
           <td>{{stat}}</td>
