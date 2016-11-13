@@ -12,7 +12,7 @@
 
   </head>
 
-  <body ng-app="overwatch_project" ng-controller="UserController">
+  <body ng-app="overwatch_project">
 
     <button id="checkScope">Scope</button>
 
@@ -49,11 +49,20 @@
     </form>
 
 
-      <div class="average_data">
+      <div class="user_data"  ng-controller="UserController">
 
         <p ng-if="!user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
         <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
+        <table ng-if="user1.fullyLoaded">
+          <tr ng-repeat="stat in a_avg_keys">
+            <td ng-if="!user2.fullyLoaded">{{stat}}</td>
+            <td>{{user1.average_stats[stat]}}</td>
+            <td ng-if="user2.fullyLoaded">{{stat}}</td>
+            <td ng-if="user2.fullyLoaded">{{user2.average_stats[stat]}}</td>
+          </tr>
+        </table>
+        <br><br>
         <table ng-if="user1.fullyLoaded">
           <tr ng-repeat="stat in a_game_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
@@ -65,6 +74,22 @@
 
     </div>
 
+    <div class="character_data" ng-controller="CharacterController">
+
+      <p ng-if="!character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}}</p>
+      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}} vs {{character2.battletag}}</p>
+      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character_name}}</p>
+
+      <table ng-if="character1.fullyLoaded">
+        <tr ng-repeat="stat in a_general_keys">
+          <td ng-if="!character2.fullyLoaded">{{stat}}</td>
+          <td>{{character1.general_stats[stat]}}</td>
+          <td ng-if="character2.fullyLoaded">{{stat}}</td>
+          <td ng-if="character2.fullyLoaded">{{character2.general_stats[stat]}}</td>
+        </tr>
+      </table>
+
+    </div>
 
       <script src="js/lib/jquery-2.1.1.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -73,7 +98,7 @@
       <script src="js/models/user.js"></script>
       <script src="js/models/character.js"></script>
       <script src="js/controllers/user.controller.js"></script>
-      <script src="js/controllers/characters.controller.js"></script>
+      <script src="js/controllers/character.controller.js"></script>
 
   </body>
 </html>

@@ -7,11 +7,16 @@ angular.module('overwatch_project').controller(
   $(function(){
     //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
     $("form").submit(function(){
-      $("form").css("margin", "0 auto")
       $scope.user1.fullyLoaded = false
       $scope.user2.fullyLoaded = false
-      event.preventDefault()
-      createUsers()
+      if ($("#characterSelect").val() === "None"){
+        $("form").css("margin", "0 auto")
+        event.preventDefault()
+        createUsers()
+      }
+      else{
+
+      }
     })
     //Create the users - set them up in $scope, see user.js for model details
     function createUsers(){
@@ -21,9 +26,6 @@ angular.module('overwatch_project').controller(
       }
     }
     //Button that lets me access $scope whenever I feel like it
-    $("#checkScope").click(function(){
-      console.log($scope);
-    })
   })
   //Put a watch on whether the users are loaded, if so it's time to compile data
   $scope.$watch('[user1.fullyLoaded, user2.fullyLoaded]', function(){
