@@ -2,7 +2,6 @@ angular.module('overwatch_project').factory('User', ['$http', function($http){
 
   function User(battletag){
     this.load(battletag)
-
   }
 
   User.prototype = {

@@ -8,6 +8,8 @@ angular.module('overwatch_project').controller(
     //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
     $("form").submit(function(){
       $("form").css("margin", "0 auto")
+      $scope.user1.fullyLoaded = false
+      $scope.user2.fullyLoaded = false
       event.preventDefault()
       createUsers()
     })
@@ -25,8 +27,11 @@ angular.module('overwatch_project').controller(
   })
   //Put a watch on whether the users are loaded, if so it's time to compile data
   $scope.$watch('[user1.fullyLoaded, user2.fullyLoaded]', function(){
-      if ($scope.user1.fullyLoaded && $scope.user2.fullyLoaded){
+      if ($scope.user1.fullyLoaded && ($scope.user2.fullyLoaded || $("#inputUser2").val() === "")){
         getUserData()
+      }
+      else {
+
       }
   })
   //Grabs the keys for any given dictionary and returns them in array form
@@ -37,24 +42,52 @@ angular.module('overwatch_project').controller(
     }
     return keys.sort()
   }
-
+  //Takes in an array, returns that array without duplicate entries
   uniq = function (a) {
     return a.sort().filter(function(item, pos, ary) {
         return !pos || item != ary[pos - 1];
     })
   }
 
+  // If one user has data the other doesn't, fills in that data for the other with "N/A"
   getUserData = function(){
-    let user1gk = getKeys($scope.user1.game_stats)
-    let user2gk = getKeys($scope.user2.game_stats)
-    let user1ak = getKeys($scope.user1.average_stats)
-    let user2ak = getKeys($scope.user2.average_stats)
+    if ($("#inputUser2").val() !== ""){
+      let user1gk = getKeys($scope.user1.game_stats)
+      let user2gk = getKeys($scope.user2.game_stats)
+      let user1ak = getKeys($scope.user1.average_stats)
+      let user2ak = getKeys($scope.user2.average_stats)
 
-    let a_game_keys = uniq(user1gk.concat(user2gk))
-    let a_avg_keys = uniq(user1ak.concat(user2ak))
+      let a_game_keys = uniq(user1gk.concat(user2gk))
+      let a_avg_keys = uniq(user1ak.concat(user2ak))
 
-    $scope.a_game_keys = a_game_keys
-    $scope.a_avg_keys = a_avg_keys
+      //Now we know all the stats we want to display, so put that in scope
+      $scope.a_game_keys = a_game_keys
+      $scope.a_avg_keys = a_avg_keys
+
+      for (let i = 0; i < a_game_keys.length; i++){
+        if (!user1gk.includes(a_game_keys[i])){
+          $scope.user1.game_stats[a_game_keys[i]] = "n/a"
+        }
+        if (!user2gk.includes(a_game_keys[i])){
+          $scope.user2.game_stats[a_game_keys[i]] = "n/a"
+        }
+      }
+
+      for (let i = 0; i < a_avg_keys.length; i++){
+        if (!user1ak.includes(a_avg_keys[i])){
+          $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
+        }
+        if (!user2ak.includes(a_avg_keys[i])){
+          $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
+        }
+      }
+    }
+    else{
+      $scope.a_game_keys = getKeys($scope.user1.game_stats)
+      $scope.a_avg_keys = getKeys($scope.user1.average_stats)
+
+    }
+  }
 
     //to remove _ for display use
 //     for(var key in x) {
@@ -75,24 +108,4 @@ angular.module('overwatch_project').controller(
 //     return newDict
 //   }, {})
 // }
-
-
-    for (let i = 0; i < a_game_keys.length; i++){
-      if (!user1gk.includes(a_game_keys[i])){
-        $scope.user1.game_stats[a_game_keys[i]] = "n/a"
-      }
-      if (!user2gk.includes(a_game_keys[i])){
-        $scope.user2.game_stats[a_game_keys[i]] = "n/a"
-      }
-    }
-
-    for (let i = 0; i < a_avg_keys.length; i++){
-      if (!user1ak.includes(a_avg_keys[i])){
-        $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
-      }
-      if (!user2ak.includes(a_avg_keys[i])){
-        $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
-      }
-    }
-  }
 }])
