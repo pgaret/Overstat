@@ -81,15 +81,15 @@ angular.module('overwatch_project').controller(
           $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
         }
       }
+
     }
     else{
       $scope.a_game_keys = getKeys($scope.user1.game_stats)
       $scope.a_avg_keys = getKeys($scope.user1.average_stats)
 
     }
-  }
 
-    //to remove _ for display use
+//to remove _ for display use
 //     for(var key in x) {
 //     if(x.hasOwnProperty(key)) {
 //         key = key.replace(/\_/g,' ')
@@ -108,4 +108,6 @@ angular.module('overwatch_project').controller(
 //     return newDict
 //   }, {})
 // }
+  }
+
 }])

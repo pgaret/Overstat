@@ -51,7 +51,9 @@
 
       <div class="average_data">
 
-        <p id="battletag" class="gradient">{{user1.battletag}}</p>
+        <p ng-if="!user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
+        <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
+
         <table ng-if="user1.fullyLoaded">
           <tr ng-repeat="stat in a_game_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
