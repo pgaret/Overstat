@@ -14,6 +14,8 @@
 
   <body ng-app="overwatch_project" ng-controller="UserController">
 
+    <button id="checkScope">Scope</button>
+
     <form id="add_user" class="" action="#" method="post">
       <input id="inputUser1" type="text" placeholder="Battletag#1234">
       <span id="vsText"> vs </span>
@@ -47,24 +49,26 @@
     </form>
     <div ng-if="user2">
       <p id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
+      <p id="battletag" class="gradient">{{user1.fullyLoaded}} vs {{user2.fullyLoaded}}</p>
     </div>
+
     <div ng-if="!user2">
       <p id="battletag" class="gradient">{{user1.battletag}}</p>
     </div>
 
     <div class="average_data">
 
-      <table ng-if="user1" ng-if="user2">
-        <tr ng-repeat="(stat, val) in user1.average_data">
+      <table ng-if="user1">
+        <tr ng-repeat="stat in a_game_keys">
           <td>{{stat}}</td>
-          <td>{{val}}</td>
+          <td>{{user1.game_stats[stat]}}</td>
         </tr>
       </table>
 
       <table ng-if="user2">
-        <tr ng-repeat="(stat, val) in user2.average_data">
-          <td id="stat">{{stat}}</td>
-          <td id="val">{{val}}</td>
+        <tr ng-repeat="stat in a_game_keys">
+          <td>{{stat}}</td>
+          <td>{{user2.game_stats[stat]}}</td>
         </tr>
       </table>
 

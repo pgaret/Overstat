@@ -1,9 +1,8 @@
 angular.module('overwatch_project').factory('User', ['$http', function($http){
 
   function User(battletag){
-    this.loadedFully = false
     this.load(battletag)
-    Store.users.push(this)
+
   }
 
   User.prototype = {
@@ -11,7 +10,10 @@ angular.module('overwatch_project').factory('User', ['$http', function($http){
       var scope = this
       $http.get(`https://owapi.net/api/v2/u/${battletag}/stats/general`).success(function(playerData){
         angular.extend(scope, playerData)
-        scope.loadData(playerData)
+    //    scope.loadData(playerData)
+      }).success(function(resolved){
+        scope.fullyLoaded = "Loaded"
+        Store.users.push(scope)
       })
     },
     loadData: function(stats){
@@ -32,11 +34,6 @@ angular.module('overwatch_project').factory('User', ['$http', function($http){
         'Objective Kills: ': stats.average_stats['objective_kills_avg'],
         'Offensive Assists: ': stats.average_stats['offensive_assists_avg']
       }
-      this.dataKeys = []
-      for (stat in stats.average_data){
-        this.dataKeys.push(stat)
-      }
-      this.loadedFully = true
     }
   };
   return User
