@@ -16,27 +16,59 @@
 
     <form id="add_user" class="" action="#" method="post">
       <input id="inputUser1" type="text" placeholder="Battletag#1234">
-      <span ng-if="user1" id="vsText"> vs </span>
+      <span id="vsText"> vs </span>
       <input id="inputUser2" type="text" placeholder="Battletag#1234">
       <input type="submit" name="name" value="Search">
+      Optional Character: <select id="characterSelect">
+        <option>None</option>
+        <option>Ana</option>
+        <option>Bastion</option>
+        <option>D.Va</option>
+        <option>Genji</option>
+        <option>Hanzo</option>
+        <option>Junkrat</option>
+        <option>Lucio</option>
+        <option>McCree</option>
+        <option>Mei</option>
+        <option>Mercy</option>
+        <option>Pharah</option>
+        <option>Reaper</option>
+        <option>Reinhardt</option>
+        <option>Roadhog</option>
+        <option>Soldier: 76</option>
+        <option>Symmetra</option>
+        <option>Torbjorn</option>
+        <option>Tracer</option>
+        <option>Widowmaker</option>
+        <option>Winston</option>
+        <option>Zarya</option>
+        <option>Zenyatta</option>
+      </select>
     </form>
+    <div ng-if="user2">
+      <p id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
+    </div>
+    <div ng-if="!user2">
+      <p id="battletag" class="gradient">{{user1.battletag}}</p>
+    </div>
 
-    <p id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
+    <div class="average_data">
 
-    <table ng-if="user1" ng-if="user2">
-      <tr ng-repeat="(stat, val) in user1.average_data">
-        <td>{{stat}}</td>
-        <td>{{val}}</td>
-      </tr>
-    </table>
+      <table ng-if="user1" ng-if="user2">
+        <tr ng-repeat="(stat, val) in user1.average_data">
+          <td>{{stat}}</td>
+          <td>{{val}}</td>
+        </tr>
+      </table>
 
-    <table ng-if="user2">
-      <tr ng-repeat="(stat, val) in user2.average_data">
-        <td>{{stat}}</td>
-        <td>{{val}}</td>
-      </tr>
-    </table>
+      <table ng-if="user2">
+        <tr ng-repeat="(stat, val) in user2.average_data">
+          <td id="stat">{{stat}}</td>
+          <td id="val">{{val}}</td>
+        </tr>
+      </table>
 
+    </div>
       <script src="js/lib/jquery-2.1.1.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
       <script src="js/lib/underscore.min.js"></script>

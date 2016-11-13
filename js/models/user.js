@@ -1,30 +1,42 @@
 angular.module('overwatch_project').factory('User', ['$http', function($http){
 
   function User(battletag){
+    this.loadedFully = false
     this.load(battletag)
     Store.users.push(this)
   }
 
   User.prototype = {
-    setData: function(playerData){
-      angular.extend(this, playerData)
-      this.loadAverageData(playerData.average_stats)
-    },
-    load: function(battletag){
+    load: function (battletag){
       var scope = this
       $http.get(`https://owapi.net/api/v2/u/${battletag}/stats/general`).success(function(playerData){
-        scope.setData(playerData)
+        angular.extend(scope, playerData)
+        scope.loadData(playerData)
       })
     },
-    loadAverageData: function(average_stats){
+    loadData: function(stats){
       this.average_data = {
-        'damage_done_avg': average_stats['damage_done_avg'],
-        'final_blows_avg': average_stats['final_blows_avg'],
-        'healing_done_avg': average_stats['healing_done_avg'],
-        'melee_final_blows_avg': average_stats['melee_final_blows_avg'],
-        'objective_kills_avg': average_stats['objective_kills_avg'],
-        'offensive_assists_avg': average_stats['offensive_assists_avg'] 
+        'Damage Done: ': stats.average_stats['damage_done_avg'],
+        'Final Blows: ': stats.average_stats['final_blows_avg'],
+        'Healing Done: ': stats.average_stats['healing_done_avg'],
+        'melee final blows: ': stats.average_stats['melee_final_blows_avg'],
+        'Objective Kills: ': stats.average_stats['objective_kills_avg'],
+        'Offensive Assists: ': stats.average_stats['offensive_assists_avg']
       }
+
+      this.game_data = {
+        'Damage Done: ': stats.average_stats['damage_done_avg'],
+        'Final Blows: ': stats.average_stats['final_blows_avg'],
+        'Healing Done: ': stats.average_stats['healing_done_avg'],
+        'melee final blows: ': stats.average_stats['melee_final_blows_avg'],
+        'Objective Kills: ': stats.average_stats['objective_kills_avg'],
+        'Offensive Assists: ': stats.average_stats['offensive_assists_avg']
+      }
+      this.dataKeys = []
+      for (stat in stats.average_data){
+        this.dataKeys.push(stat)
+      }
+      this.loadedFully = true
     }
   };
   return User

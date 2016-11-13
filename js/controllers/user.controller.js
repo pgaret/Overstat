@@ -3,13 +3,22 @@ angular.module('overwatch_project').controller(
   $(function(){
     $("form").submit(function(){
       event.preventDefault()
-      user1 = $("#inputUser1").val().replace("#", "-")
-      if ($("#inputUser2").val() !== ""){
-        user2 = $("#inputUser2").val().replace("#", "-")
-      }
-      $scope.user1 = new User(user1)
-      $scope.user2 = new User(user2)
-      $("#add_user").css("margin", "0 auto")
+      createUsers()
+      checkUsers()
     })
+    function createUsers(){
+      $scope.user1 = new User($("#inputUser1").val().replace("#", "-"))
+      if ($("#inputUser2").val() !== ""){
+        $scope.user2 = new User($("#inputUser2").val().replace("#", "-"))
+      }
+    }
+    function checkUsers(){
+      debugger
+      if ($scope.user1 && $scope.user2){
+        if ($scope.user1.loadedFully == true && $scope.user2.loadedFully == true){
+          console.log("Ready")
+        }
+      }
+    }
   })
-}])
+  }])
