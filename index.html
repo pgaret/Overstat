@@ -71,7 +71,7 @@
           <tr ng-repeat="stat in a_game_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
             <!-- EDIT HERE -->
-            <td style="color: {{user1.game_stats[stat][1]}}">{{user1.game_stats[stat][0]}}</td>
+            <td ng-style="{'color': user1.game_stats[stat][1]}">{{user1.game_stats[stat][0]}}</td>
             <td ng-if="user2.fullyLoaded">{{stat}}</td>
             <td ng-if="user2.fullyLoaded">{{user2.game_stats[stat][0]}}</td>
           </tr>
