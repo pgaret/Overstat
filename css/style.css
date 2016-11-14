@@ -127,6 +127,22 @@ input[type="submit"]{
 	-webkit-text-fill-color: transparent;
 }
 
+#character_name{
+	font-size: 4vw;
+	font-family: "Big Noodle Titling Oblique";
+	color: rgb(241,156,67);
+
+	margin: 5% auto;
+	text-align: center;
+}
+
+#character_name.gradient{
+	background: -webkit-linear-gradient(top, rgb(229,228,230), rgb(238,128,49));
+	background: linear-gradient(top, #878787, #000);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
 .user_data{
 	/*-moz-column-count: 2;
 	-webkit-column-count: 2;

@@ -80,7 +80,7 @@
 
       <p ng-if="!character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}}</p>
       <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}} vs {{character2.battletag}}</p>
-      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character_name}}</p>
+      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="character_name" class="gradient">{{character_name}}</p>
 
       <table ng-if="character1.fullyLoaded">
         <tr ng-repeat="stat in a_general_keys">
