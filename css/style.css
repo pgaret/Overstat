@@ -18,6 +18,7 @@ html {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#827984', endColorstr='#5A8184',GradientType=0 ); /* IE6-9 */
 	background-attachment: fixed;
 	margin: 0;
+  padding-bottom: 50px;
 }
 
 body {
@@ -116,7 +117,7 @@ input[type="submit"]{
 	font-family: "Big Noodle Titling Oblique";
 	color: rgb(241,156,67);
 
-	margin: 5% auto;
+	margin: 2% auto;
 	text-align: center;
 }
 
@@ -132,7 +133,7 @@ input[type="submit"]{
 	font-family: "Big Noodle Titling Oblique";
 	color: rgb(241,156,67);
 
-	margin: 5% auto;
+	margin: 2% auto;
 	text-align: center;
 }
 

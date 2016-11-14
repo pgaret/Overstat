@@ -53,25 +53,27 @@
 
 
       <div class="user_data"  ng-controller="UserController">
-        
+
         <p ng-if="!user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
         <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
         <table ng-if="user1.fullyLoaded">
           <tr ng-repeat="stat in a_avg_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
-            <td>{{user1.average_stats[stat]}}</td>
+            <!-- EDIT HERE -->
+            <td style="color: user1.average_stats[stat][1]">{{user1.average_stats[stat][0]}}</td>
             <td ng-if="user2.fullyLoaded">{{stat}}</td>
-            <td ng-if="user2.fullyLoaded">{{user2.average_stats[stat]}}</td>
+            <td ng-if="user2.fullyLoaded">{{user2.average_stats[stat][0]}}</td>
           </tr>
         </table>
         <br><br>
         <table ng-if="user1.fullyLoaded">
           <tr ng-repeat="stat in a_game_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
-            <td>{{user1.game_stats[stat]}}</td>
+            <!-- EDIT HERE -->
+            <td style="color: {{user1.game_stats[stat][1]}}">{{user1.game_stats[stat][0]}}</td>
             <td ng-if="user2.fullyLoaded">{{stat}}</td>
-            <td ng-if="user2.fullyLoaded">{{user2.game_stats[stat]}}</td>
+            <td ng-if="user2.fullyLoaded">{{user2.game_stats[stat][0]}}</td>
           </tr>
         </table>
 
@@ -79,16 +81,16 @@
 
     <div class="character_data" ng-controller="CharacterController">
 
-      <p ng-if="!character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}}</p>
-      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.battletag}} vs {{character2.battletag}}</p>
+      <p ng-if="!character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.data.battletag}}</p>
+      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.data.battletag}} vs {{character2.data.battletag}}</p>
       <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="character_name" class="gradient">{{character_name}}</p>
 
       <table ng-if="character1.fullyLoaded">
         <tr ng-repeat="stat in a_general_keys">
           <td ng-if="!character2.fullyLoaded">{{stat}}</td>
-          <td>{{character1.general_stats[stat]}}</td>
+          <td>{{character1.data.general_stats[stat]}}</td>
           <td ng-if="character2.fullyLoaded">{{stat}}</td>
-          <td ng-if="character2.fullyLoaded">{{character2.general_stats[stat]}}</td>
+          <td ng-if="character2.fullyLoaded">{{character2.data.general_stats[stat]}}</td>
         </tr>
       </table>
 

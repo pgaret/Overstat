@@ -7,11 +7,16 @@ angular.module('overwatch_project').factory('Character', ['$http', function($htt
   Character.prototype = {
     load: function (battletag, character){
       var scope = this
-      $http.get(`https://owapi.net/api/v2/u/${battletag}/heroes/${character}/general`).success(function(characterData){
+      $http.get(`https://owapi.net/api/v2/u/${battletag}/heroes/${character}/general`).then(function(characterData){
         angular.extend(scope, characterData)
-      }).success(function(resolved){
         scope.fullyLoaded = "Loaded"
         Store.characters.push(scope)
+      }).catch(function(error) {
+        $http.get(`https://owapi.net/api/v2/u/${battletag}/stats/general`).success(function() {
+          $("#error_message1").text(`${battletag} has never played ${character}!`)
+        }).error(function() {
+          $("#error_message1").text(`Invalid battletag: ${battletag}`)
+        })
       })
     }
   };

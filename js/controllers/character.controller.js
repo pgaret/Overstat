@@ -54,8 +54,8 @@ angular.module('overwatch_project').controller(
     // If one character has data the other doesn't, fills in that data for the other with "N/A"
     getCharacterData = function(){
       if ($("#inputUser2").val() !== ""){
-        let character1gk = getKeys($scope.character1.general_stats)
-        let character2gk = getKeys($scope.character2.general_stats)
+        let character1gk = getKeys($scope.character1.data.general_stats)
+        let character2gk = getKeys($scope.character2.data.general_stats)
 
         let a_general_keys = uniq(character1gk.concat(character2gk))
 
@@ -64,18 +64,33 @@ angular.module('overwatch_project').controller(
 
         for (let i = 0; i < a_general_keys.length; i++){
           if (!character1gk.includes(a_general_keys[i])){
-            $scope.character1.general_stats[a_general_keys[i]] = "n/a"
+            $scope.character1.data.general_stats[a_general_keys[i]] = "n/a"
+          } else {
+            if (isNumeric($scope.character1.data.general_stats[a_general_keys[i]])) {
+             $scope.character1.data.general_stats[a_general_keys[i]] = numberWithCommas(+$scope.character1.data.general_stats[a_general_keys[i]].toFixed(2))
+            }
           }
           if (!character2gk.includes(a_general_keys[i])){
-            $scope.character2.general_stats[a_general_keys[i]] = "n/a"
+            $scope.character2.data.general_stats[a_general_keys[i]] = "n/a"
+          } else {
+            if (isNumeric($scope.character2.data.general_stats[a_general_keys[i]])) {
+              $scope.character2.data.general_stats[a_general_keys[i]] = numberWithCommas(+$scope.character2.data.general_stats[a_general_keys[i]].toFixed(2))
+            }
           }
         }
 
       }
       else{
-        $scope.a_general_keys = getKeys($scope.character1.general_stats)
+        $scope.a_general_keys = getKeys($scope.character1.data.general_stats)
       }
 
+      function numberWithCommas(n) {
+          var parts=n.toString().split(".");
+          return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        }
+      function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
   //to remove _ for display use
   //     for(var key in x) {
   //     if(x.hasOwnProperty(key)) {

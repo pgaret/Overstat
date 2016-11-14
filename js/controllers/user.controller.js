@@ -36,7 +36,6 @@ angular.module('overwatch_project').controller(
 
   //Put a watch on whether the users are loaded, if so it's time to compile data
   $scope.$watch('[user1.fullyLoaded, user2.fullyLoaded]', function(){
-    debugger
       if ($scope.user1.fullyLoaded && ($scope.user2.fullyLoaded || $scope.user2.fullyLoaded === 'error' || $("#inputUser2").val() === "")){
         getUserData()
       }
@@ -74,21 +73,39 @@ angular.module('overwatch_project').controller(
       $scope.a_game_keys = a_game_keys
       $scope.a_avg_keys = a_avg_keys
 
+
+
       for (let i = 0; i < a_game_keys.length; i++){
         if (!user1gk.includes(a_game_keys[i])){
           $scope.user1.game_stats[a_game_keys[i]] = "n/a"
+        } else {
+          $scope.user1.game_stats[a_game_keys[i]] = numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2))
         }
         if (!user2gk.includes(a_game_keys[i])){
           $scope.user2.game_stats[a_game_keys[i]] = "n/a"
+        } else {
+          $scope.user2.game_stats[a_game_keys[i]] = numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2))
+        }
+        // LOGIC FOR COLORS HERE
+        if ($scope.user1.game_stats[a_game_keys[i]] > $scope.user2.game_stats[a_game_keys[i]]) {
+          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]], 'green']
+          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]], 'red']
+        } else {
+          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]], 'red']
+          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]], 'green']
         }
       }
 
       for (let i = 0; i < a_avg_keys.length; i++){
         if (!user1ak.includes(a_avg_keys[i])){
           $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
+        } else {
+          $scope.user1.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user1.average_stats[a_avg_keys[i]].toFixed(2))
         }
         if (!user2ak.includes(a_avg_keys[i])){
           $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
+        } else {
+          $scope.user2.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user2.average_stats[a_avg_keys[i]].toFixed(2))
         }
       }
 
@@ -99,12 +116,13 @@ angular.module('overwatch_project').controller(
 
     }
 
-//to remove _ for display use
-//     for(var key in x) {
-//     if(x.hasOwnProperty(key)) {
-//         key = key.replace(/\_/g,' ')
-//     }
-// }
+
+
+
+    function numberWithCommas(n) {
+        var parts=n.toString().split(".");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+      }
 
 // function renameKeys (dict, keyMap) {
 //   return _.reduce(dict, function (newDict, val, oldKey) {
