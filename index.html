@@ -14,8 +14,8 @@
 
   <body ng-app="overwatch_project">
 
-    <!-- <button id="scope_c">Ch Scope</button>
-    <button id="scope_u">Us Scope></button> -->
+    <button id="scope_c">Ch Scope</button>
+    <button id="scope_u">Us Scope></button>
 
     <form id="add_user" class="" action="#" method="post">
       <p id="error_message1" class="error_message"></p>
@@ -60,10 +60,10 @@
         <table ng-if="user1.fullyLoaded">
           <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Average Stats</p>
           <tr ng-repeat="stat in a_average_keys">
-            <td ng-if="!user2.fullyLoaded">{{stat}}</td>
+            <td ng-if="!user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
             <!-- EDIT HERE -->
             <td ng-style="{'color': user1.average_stats[stat][1]}">{{user1.average_stats[stat][0]}}</td>
-            <td ng-if="user2.fullyLoaded">{{stat}}</td>
+            <td ng-if="user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
             <td ng-if="user2.fullyLoaded" ng-style="{'color': user2.average_stats[stat][1]}">{{user2.average_stats[stat][0]}}</td>
           </tr>
         </table>
@@ -71,10 +71,10 @@
         <table ng-if="user1.fullyLoaded">
           <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Overall Stats</p>
           <tr ng-repeat="stat in a_game_keys">
-            <td ng-if="!user2.fullyLoaded">{{stat}}</td>
+            <td ng-if="!user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
             <!-- EDIT HERE -->
             <td ng-style="{'color': user1.game_stats[stat][1]}">{{user1.game_stats[stat][0]}}</td>
-            <td ng-if="user2.fullyLoaded">{{stat}}</td>
+            <td ng-if="user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
             <td ng-if="user2.fullyLoaded" ng-style="{'color': user2.game_stats[stat][1]}">{{user2.game_stats[stat][0]}}</td>
           </tr>
         </table>
@@ -90,9 +90,9 @@
       <table ng-if="character1.fullyLoaded">
         <p ng-if="character1.fullyLoaded" id="character_name" class="gradient"> Character Stats</p>
         <tr ng-repeat="stat in a_general_keys">
-          <td ng-if="!character2.fullyLoaded">{{stat}}</td>
+          <td ng-if="!character2.fullyLoaded">{{removeUnderscore(stat)}}</td>
           <td ng-style="{'color': character1.data.general_stats[stat][1]}">{{character1.data.general_stats[stat][0]}}</td>
-          <td ng-if="character2.fullyLoaded">{{stat}}</td>
+          <td ng-if="character2.fullyLoaded">{{removeUnderscore(stat)}}</td>
           <td ng-if="character2.fullyLoaded" ng-style="{'color': character2.data.general_stats[stat][1]}">{{character2.data.general_stats[stat][0]}}</td>
         </tr>
       </table>

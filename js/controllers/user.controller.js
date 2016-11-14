@@ -171,4 +171,11 @@ angular.module('overwatch_project').controller(
 // }
   }
 
+  $scope.removeUnderscore = function(str){
+    while (str.includes("_")){
+      str = str.replace("_", " ")
+    }
+    return str
+  }
+
 }])

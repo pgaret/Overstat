@@ -82,7 +82,6 @@ angular.module('overwatch_project').controller(
                 $scope.character2.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)), 'red']
               }
               else {
-                debugger
                 $scope.character1.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character1.data.general_stats[a_general_keys[i]]).toFixed(2)), 'red']
                 $scope.character2.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)), 'green']
               }
@@ -121,6 +120,13 @@ angular.module('overwatch_project').controller(
   //     return newDict
   //   }, {})
   // }
+    }
+
+    $scope.removeUnderscore = function(str){
+      while (str.includes("_")){
+        str = str.replace("_", " ")
+      }
+      return str
     }
 
   }])
