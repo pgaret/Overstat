@@ -14,7 +14,8 @@
 
   <body ng-app="overwatch_project">
 
-    <button id="checkScope">Scope</button>
+    <button id="scope_c">Ch Scope</button>
+    <button id="scope_u">Us Scope></button>
 
     <form id="add_user" class="" action="#" method="post">
       <p id="error_message1" class="error_message"></p>
@@ -52,7 +53,7 @@
 
 
       <div class="user_data"  ng-controller="UserController">
-
+        
         <p ng-if="!user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
         <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 

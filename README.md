@@ -25,7 +25,6 @@ MODELS
     - character stats
 
 TODO
-- validate form inputs
-  - checks if they exist or not
-- pick which stats we want to display (15)
--
+- Green and red comparison values
+- Rounding values of data
+- How to handle 404's on the character side

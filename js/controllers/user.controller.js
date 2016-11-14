@@ -29,10 +29,15 @@ angular.module('overwatch_project').controller(
       }
     }
     //Button that lets me access $scope whenever I feel like it
+    $("#scope_u").click(function(){
+      console.log($scope);
+    })
   })
+
   //Put a watch on whether the users are loaded, if so it's time to compile data
   $scope.$watch('[user1.fullyLoaded, user2.fullyLoaded]', function(){
-      if ($scope.user1.fullyLoaded && ($scope.user2.fullyLoaded || $("#inputUser2").val() === "")){
+    debugger
+      if ($scope.user1.fullyLoaded && ($scope.user2.fullyLoaded || $scope.user2.fullyLoaded === 'error' || $("#inputUser2").val() === "")){
         getUserData()
       }
       else {
@@ -56,7 +61,7 @@ angular.module('overwatch_project').controller(
 
   // If one user has data the other doesn't, fills in that data for the other with "N/A"
   getUserData = function(){
-    if ($("#inputUser2").val() !== ""){
+    if ($("#inputUser2").val() !== "" || $scope.user2.error === true){
       let user1gk = getKeys($scope.user1.game_stats)
       let user2gk = getKeys($scope.user2.game_stats)
       let user1ak = getKeys($scope.user1.average_stats)

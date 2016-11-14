@@ -23,7 +23,7 @@ angular.module('overwatch_project').controller(
           $scope.character2 = new Character($("#inputUser2").val().replace("#", "-"), char_name)
         }
       }
-      $("#checkScope").click(function(){
+      $("#scope_c").click(function(){
         console.log($scope);
       })
     })

@@ -13,6 +13,7 @@ angular.module('overwatch_project').factory('User', ['$http', function($http){
         Store.users.push(scope)
     //    scope.loadData(playerData)
   }, function(error){
+        scope.fullyLoaded = 'error'
         if ($("#error_message1").text() !== "") {
           $("#error_message2").text(`Invalid battletag: ${battletag}`)
         } else{
