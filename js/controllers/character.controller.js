@@ -64,17 +64,28 @@ angular.module('overwatch_project').controller(
 
         for (let i = 0; i < a_general_keys.length; i++){
           if (!character1gk.includes(a_general_keys[i])){
-            $scope.character1.data.general_stats[a_general_keys[i]] = "n/a"
-          } else {
-            if (isNumeric($scope.character1.data.general_stats[a_general_keys[i]])) {
-             $scope.character1.data.general_stats[a_general_keys[i]] = numberWithCommas(+$scope.character1.data.general_stats[a_general_keys[i]].toFixed(2))
-            }
+            $scope.character1.data.general_stats[a_general_keys[i]] = ["n/a", 'black']
+            $scope.character2.data.general_stats[a_general_keys[i]] = [$scope.character2.data.general_stats[a_general_keys[i]]]
           }
           if (!character2gk.includes(a_general_keys[i])){
-            $scope.character2.data.general_stats[a_general_keys[i]] = "n/a"
-          } else {
-            if (isNumeric($scope.character2.data.general_stats[a_general_keys[i]])) {
-              $scope.character2.data.general_stats[a_general_keys[i]] = numberWithCommas(+$scope.character2.data.general_stats[a_general_keys[i]].toFixed(2))
+            $scope.character2.data.general_stats[a_general_keys[i]] = ["n/a", 'black']
+            $scope.character1.data.general_stats[a_general_keys[i]] = [$scope.character1.data.general_stats[a_general_keys[i]]]
+          }
+          if (character1gk.includes(a_general_keys[i]) && character2gk.includes(a_general_keys[i])) {
+            if (isNumeric($scope.character1.data.general_stats[a_general_keys[i]]) || !$scope.character1.data.general_stats[a_general_keys[i]].includes(":")) {
+              if(+parseFloat($scope.character1.data.general_stats[a_general_keys[i]]).toFixed(2) === +parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)) {
+                $scope.character1.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character1.data.general_stats[a_general_keys[i]]).toFixed(2)), 'black']
+                $scope.character2.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)), 'black']
+              }
+              else if (parseFloat($scope.character1.data.general_stats[a_general_keys[i]]) > parseFloat(+$scope.character2.data.general_stats[a_general_keys[i]])) {
+                $scope.character1.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character1.data.general_stats[a_general_keys[i]]).toFixed(2)), 'green']
+                $scope.character2.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)), 'red']
+              }
+              else {
+                debugger
+                $scope.character1.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character1.data.general_stats[a_general_keys[i]]).toFixed(2)), 'red']
+                $scope.character2.data.general_stats[a_general_keys[i]] = [numberWithCommas(+parseFloat($scope.character2.data.general_stats[a_general_keys[i]]).toFixed(2)), 'green']
+              }
             }
           }
         }

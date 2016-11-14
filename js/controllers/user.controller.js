@@ -67,52 +67,85 @@ angular.module('overwatch_project').controller(
       let user2ak = getKeys($scope.user2.average_stats)
 
       let a_game_keys = uniq(user1gk.concat(user2gk))
-      let a_avg_keys = uniq(user1ak.concat(user2ak))
+      let a_average_keys = uniq(user1ak.concat(user2ak))
 
       //Now we know all the stats we want to display, so put that in scope
       $scope.a_game_keys = a_game_keys
-      $scope.a_avg_keys = a_avg_keys
+      $scope.a_average_keys = a_average_keys
 
 
 
       for (let i = 0; i < a_game_keys.length; i++){
         if (!user1gk.includes(a_game_keys[i])){
-          $scope.user1.game_stats[a_game_keys[i]] = "n/a"
-        } else {
-          $scope.user1.game_stats[a_game_keys[i]] = numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2))
+          $scope.user1.game_stats[a_game_keys[i]] = ["n/a", 'black']
+          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]]]
         }
         if (!user2gk.includes(a_game_keys[i])){
-          $scope.user2.game_stats[a_game_keys[i]] = "n/a"
-        } else {
-          $scope.user2.game_stats[a_game_keys[i]] = numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2))
+          $scope.user2.game_stats[a_game_keys[i]] = ["n/a", 'black']
+          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]]]
         }
         // LOGIC FOR COLORS HERE
-        if ($scope.user1.game_stats[a_game_keys[i]] > $scope.user2.game_stats[a_game_keys[i]]) {
-          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]], 'green']
-          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]], 'red']
-        } else {
-          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]], 'red']
-          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]], 'green']
+        if (user1gk.includes(a_game_keys[i]) && user2gk.includes(a_game_keys[i])) {
+          if(+parseFloat($scope.user1.game_stats[a_game_keys[i]]).toFixed(2) === +parseFloat($scope.user2.game_stats[a_game_keys[i]]).toFixed(2)) {
+            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'black']
+            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'black']
+          }
+          else if (parseFloat($scope.user1.game_stats[a_game_keys[i]]) > parseFloat(+$scope.user2.game_stats[a_game_keys[i]])) {
+            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'green']
+            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'red']
+          }
+
+          else {
+            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'red']
+            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'green']
+          }
         }
       }
 
-      for (let i = 0; i < a_avg_keys.length; i++){
-        if (!user1ak.includes(a_avg_keys[i])){
-          $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
-        } else {
-          $scope.user1.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user1.average_stats[a_avg_keys[i]].toFixed(2))
+      for (let i = 0; i < a_average_keys.length; i++){
+        if (!user1ak.includes(a_average_keys[i])){
+          $scope.user1.average_stats[a_average_keys[i]] = ["n/a", 'black']
+          $scope.user2.average_stats[a_average_keys[i]] = [$scope.user2.average_stats[a_average_keys[i]]]
         }
-        if (!user2ak.includes(a_avg_keys[i])){
-          $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
-        } else {
-          $scope.user2.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user2.average_stats[a_avg_keys[i]].toFixed(2))
+        if (!user2ak.includes(a_average_keys[i])){
+          $scope.user2.average_stats[a_average_keys[i]] = ["n/a", 'black']
+          $scope.user1.average_stats[a_average_keys[i]] = [$scope.user1.average_stats[a_average_keys[i]]]
+        }
+        // LOGIC FOR COLORS HERE
+        if (user1ak.includes(a_average_keys[i]) && user2ak.includes(a_average_keys[i])) {
+          if(+parseFloat($scope.user1.average_stats[a_average_keys[i]]).toFixed(2) === +parseFloat($scope.user2.average_stats[a_average_keys[i]]).toFixed(2)) {
+            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'black']
+            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'black']
+          }
+          else if (parseFloat($scope.user1.average_stats[a_average_keys[i]]) > parseFloat(+$scope.user2.average_stats[a_average_keys[i]])) {
+            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'green']
+            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'red']
+          }
+
+          else {
+            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'red']
+            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'green']
+          }
         }
       }
+      //
+      // for (let i = 0; i < a_avg_keys.length; i++){
+      //   if (!user1ak.includes(a_avg_keys[i])){
+      //     $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
+      //   } else {
+      //     $scope.user1.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user1.average_stats[a_avg_keys[i]].toFixed(2))
+      //   }
+      //   if (!user2ak.includes(a_avg_keys[i])){
+      //     $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
+      //   } else {
+      //     $scope.user2.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user2.average_stats[a_avg_keys[i]].toFixed(2))
+      //   }
+      // }
 
     }
     else{
       $scope.a_game_keys = getKeys($scope.user1.game_stats)
-      $scope.a_avg_keys = getKeys($scope.user1.average_stats)
+      $scope.a_average_keys = getKeys($scope.user1.average_stats)
 
     }
 
