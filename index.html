@@ -12,10 +12,12 @@
 
   </head>
 
-  <body ng-app="overwatch_project">
+  <body ng-app="overwatch_project"  ng-controller="UserController">
 
-    <button id="scope_c">Ch Scope</button>
-    <button id="scope_u">Us Scope></button>
+    <img style="display: block; margin: auto; width: 50%; padding-top: 4%; padding-bottom: 1%;" src="css/overstatv3.png">
+
+    <!-- <button id="scope_c">Ch Scope</button>
+    <button id="scope_u">Us Scope></button> -->
 
     <form id="add_user" class="" action="#" method="post">
       <p id="error_message1" class="error_message"></p>
@@ -52,30 +54,30 @@
     </form>
 
 
-      <div class="user_data"  ng-controller="UserController">
+      <div class="user_data">
 
-        <p ng-if="!user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
-        <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
+        <p ng-if="(!user2.fullyLoaded || user2.fullyLoaded === 'error') && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
+        <p ng-if="user2.fullyLoaded === 'Loaded' && user1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
-        <table ng-if="user1.fullyLoaded">
-          <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Average Stats</p>
+        <table ng-if="user1.fullyLoaded === 'Loaded'">
+          <p ng-if="user1.fullyLoaded === 'Loaded'" id="character_name" class="gradient"> Average Stats</p>
           <tr ng-repeat="stat in a_average_keys">
-            <td ng-if="!user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
+            <td ng-if="!user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
             <!-- EDIT HERE -->
             <td ng-style="{'color': user1.average_stats[stat][1]}">{{user1.average_stats[stat][0]}}</td>
-            <td ng-if="user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
-            <td ng-if="user2.fullyLoaded" ng-style="{'color': user2.average_stats[stat][1]}">{{user2.average_stats[stat][0]}}</td>
+            <td ng-if="user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
+            <td ng-if="user2.fullyLoaded === 'Loaded'" ng-style="{'color': user2.average_stats[stat][1]}">{{user2.average_stats[stat][0]}}</td>
           </tr>
         </table>
         <br><br>
-        <table ng-if="user1.fullyLoaded">
-          <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Overall Stats</p>
+        <table ng-if="user1.fullyLoaded === 'Loaded'">
+          <p ng-if="user1.fullyLoaded === 'Loaded'" id="character_name" class="gradient"> Overall Stats</p>
           <tr ng-repeat="stat in a_game_keys">
-            <td ng-if="!user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
+            <td ng-if="!user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
             <!-- EDIT HERE -->
             <td ng-style="{'color': user1.game_stats[stat][1]}">{{user1.game_stats[stat][0]}}</td>
-            <td ng-if="user2.fullyLoaded">{{removeUnderscore(stat)}}</td>
-            <td ng-if="user2.fullyLoaded" ng-style="{'color': user2.game_stats[stat][1]}">{{user2.game_stats[stat][0]}}</td>
+            <td ng-if="user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
+            <td ng-if="user2.fullyLoaded === 'Loaded'" ng-style="{'color': user2.game_stats[stat][1]}">{{user2.game_stats[stat][0]}}</td>
           </tr>
         </table>
 
@@ -83,17 +85,17 @@
 
     <div class="character_data" ng-controller="CharacterController">
 
-      <p ng-if="!character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.data.battletag}}</p>
-      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="battletag" class="gradient">{{character1.data.battletag}} vs {{character2.data.battletag}}</p>
-      <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="character_name" class="gradient">{{character_name}}</p>
+      <p ng-if="!character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{character1.data.battletag}}</p>
+      <p ng-if="character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{character1.data.battletag}} vs {{character2.data.battletag}}</p>
+      <p ng-if="character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="character_name" class="gradient">{{character_name}}</p>
 
-      <table ng-if="character1.fullyLoaded">
-        <p ng-if="character1.fullyLoaded" id="character_name" class="gradient"> Character Stats</p>
+      <table ng-if="character1.fullyLoaded === 'Loaded'">
+        <p ng-if="character1.fullyLoaded === 'Loaded'" id="character_name" class="gradient"> Character Stats</p>
         <tr ng-repeat="stat in a_general_keys">
-          <td ng-if="!character2.fullyLoaded">{{removeUnderscore(stat)}}</td>
+          <td ng-if="!character2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
           <td ng-style="{'color': character1.data.general_stats[stat][1]}">{{character1.data.general_stats[stat][0]}}</td>
-          <td ng-if="character2.fullyLoaded">{{removeUnderscore(stat)}}</td>
-          <td ng-if="character2.fullyLoaded" ng-style="{'color': character2.data.general_stats[stat][1]}">{{character2.data.general_stats[stat][0]}}</td>
+          <td ng-if="character2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
+          <td ng-if="character2.fullyLoaded === 'Loaded'" ng-style="{'color': character2.data.general_stats[stat][1]}">{{character2.data.general_stats[stat][0]}}</td>
         </tr>
       </table>
 

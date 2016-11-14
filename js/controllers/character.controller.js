@@ -3,6 +3,7 @@ angular.module('overwatch_project').controller(
     //Set up the characters so that I can call on them later without getting errors
     $scope.character1 = "Empty"
     $scope.character2 = "Empty"
+    $scope.img_path = "css/overwatch-logo.jpg"
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
