@@ -24,7 +24,7 @@
       <span id="vsText"> vs </span>
       <input id="inputUser2" type="text" placeholder="Battletag#1234">
       <input type="submit" name="name" value="Search">
-      Optional Character: <select id="characterSelect">
+      <span id="opt">Optional Character: </span><select id="characterSelect">
         <option>None</option>
         <option>Ana</option>
         <option>Bastion</option>
@@ -58,6 +58,7 @@
         <p ng-if="user2.fullyLoaded && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
         <table ng-if="user1.fullyLoaded">
+          <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Average Stats</p>
           <tr ng-repeat="stat in a_average_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
             <!-- EDIT HERE -->
@@ -68,6 +69,7 @@
         </table>
         <br><br>
         <table ng-if="user1.fullyLoaded">
+          <p ng-if="user1.fullyLoaded" id="character_name" class="gradient"> Overall Stats</p>
           <tr ng-repeat="stat in a_game_keys">
             <td ng-if="!user2.fullyLoaded">{{stat}}</td>
             <!-- EDIT HERE -->
@@ -86,6 +88,7 @@
       <p ng-if="character2.fullyLoaded && character1.fullyLoaded" id="character_name" class="gradient">{{character_name}}</p>
 
       <table ng-if="character1.fullyLoaded">
+        <p ng-if="character1.fullyLoaded" id="character_name" class="gradient"> Character Stats</p>
         <tr ng-repeat="stat in a_general_keys">
           <td ng-if="!character2.fullyLoaded">{{stat}}</td>
           <td ng-style="{'color': character1.data.general_stats[stat][1]}">{{character1.data.general_stats[stat][0]}}</td>
