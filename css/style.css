@@ -14,7 +14,7 @@ html {
 	background: -webkit-linear-gradient(top, rgb(255,255,255) 0%, rgb(0,195,255) 100%); /* Chrome10+,Safari5.1+ */
 	background: -o-linear-gradient(top,  #827984 0%,#5A8184 100%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(top,  #827984 0%,#5A8184 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #B2B0B0 0%,rgb(0,195,255) 100%); /* W3C */
+	background: linear-gradient(to bottom, #00C3FF 50%, #FFFFFF); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#827984', endColorstr='#5A8184',GradientType=0 ); /* IE6-9 */
 	background-attachment: fixed;
 	margin: 0;
@@ -36,6 +36,13 @@ form {
 	width:75%;
 	padding: 3%;
 }
+
+select {
+  font-family: "Big Noodle Titling";
+  font-size: 1.5vw;
+  padding: 3%;
+}
+
 
 .error_message{
 	font-family: "Big Noodle Titling";
