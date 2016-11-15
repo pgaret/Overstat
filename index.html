@@ -61,7 +61,7 @@
         <table ng-if="user1.fullyLoaded === 'Loaded'">
           <p ng-if="user1.fullyLoaded === 'Loaded'" id="character_name" class="gradient"> Average Stats</p>
           <tr ng-repeat="stat in a_average_keys">
-            <td ng-if="!user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
+            <td ng-if="user2.fullyLoaded !== 'Loaded'">{{removeUnderscore(stat)}}</td>
             <!-- EDIT HERE -->
             <td ng-style="{'color': user1.average_stats[stat][1]}">{{user1.average_stats[stat][0]}}</td>
             <td ng-if="user2.fullyLoaded === 'Loaded'">{{removeUnderscore(stat)}}</td>
