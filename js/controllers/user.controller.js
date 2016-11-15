@@ -103,9 +103,14 @@ angular.module('overwatch_project').controller(
       user.average_stats[stat] = standardize(user.average_stats[stat])
     }
 
-    $("#video").css("display", "none")
-    $("#add_user").css("display", "block")
-    $("#logo").css("display", "block")
+    setTimeout(function() {
+      $("#video").css("display", "none")
+      $("#add_user").css("display", "block")
+      $("#logo").css("display", "block")
+      $(".user_data").css("display", "block")
+      $(".character_data").css("display", "block")
+      $("#display_user")[0].scrollIntoView()
+    }, 2000);
 
     return user
 
@@ -200,30 +205,21 @@ angular.module('overwatch_project').controller(
       //   }
       // }
 
-    $("#video").css("display", "none")
-    $("#add_user").css("display", "block")
-    $("#logo").css("display", "block")
+    setTimeout(function() {
+      $("#video").css("display", "none")
+      $("#add_user").css("display", "block")
+      $("#logo").css("display", "block")
+      $(".user_data").css("display", "block")
+      $(".character_data").css("display", "block")
+      $("#display_user")[0].scrollIntoView()
+    }, 2000);
 
     function numberWithCommas(n) {
         var parts=n.toString().split(".");
         parts = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
         return +parseFloat(parts).toFixed(2)
       }
-
-// function renameKeys (dict, keyMap) {
-//   return _.reduce(dict, function (newDict, val, oldKey) {
-//     var newKey
-//     if (keyMap[oldKey]) {
-//       newKey = keyMap[oldKey]
-//     } else {
-//       newKey = oldKey
-//     }
-//     newDict[newKey] = val
-//     return newDict
-//   }, {})
-// }
   }
-
   $scope.removeUnderscore = function(str){
     while (str.includes("_")){
       str = str.replace("_", " ")

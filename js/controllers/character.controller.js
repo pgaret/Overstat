@@ -9,6 +9,23 @@ angular.module('overwatch_project').controller(
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
+        if ($("#characterSelect").val().toLowerCase() === "none") {
+          vid = "css/CharacterVid/reinhardt.webm"
+        }
+        else if ($("#characterSelect").val().toLowerCase() === "soldier: 76") {
+          vid = "css/CharacterVid/soldier76.webm"
+        } else {
+          vid = "css/CharacterVid/" + $("#characterSelect").val().toLowerCase() + ".webm"
+        }
+        $("#source")[0].src = vid
+        $('#video')[0].pause()
+        $('#video')[0].load()
+        $("#video").css("display", "block")
+        $(".user_data").css("display", "none")
+        $(".character_data").css("display", "none")
+        $("#add_user").css("display", "none")
+        $("#logo").css("display", "none")
+
         $scope.character1.fullyLoaded = false
         $scope.character2.fullyLoaded = false
         $scope.character.fullyLoaded = false
@@ -18,10 +35,6 @@ angular.module('overwatch_project').controller(
 
           $scope.isOne = $("#inputUser1").val()
           $scope.isTwo = $("#inputUser2").val()
-
-          $("#video").css("display", "block")
-          $("#add_user").css("display", "none")
-          $("#logo").css("display", "none")
 
           $scope.character_name = $("#characterSelect").val()
 
@@ -94,10 +107,14 @@ angular.module('overwatch_project').controller(
       for (stat in character.data.general_stats){
         character.data.general_stats[stat] = standardize(character.data.general_stats[stat])
       }
-
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
+      setTimeout(function() {
+        $("#video").css("display", "none")
+        $("#add_user").css("display", "block")
+        $("#logo").css("display", "block")
+        $(".user_data").css("display", "block")
+        $(".character_data").css("display", "block")
+        $("#display_char")[0].scrollIntoView()
+      }, 2000);
 
       return character
 
@@ -147,38 +164,23 @@ angular.module('overwatch_project').controller(
           }
         }
 
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
+      setTimeout(function() {
+        $("#video").css("display", "none")
+        $("#add_user").css("display", "block")
+        $("#logo").css("display", "block")
+        $(".user_data").css("display", "block")
+        $(".character_data").css("display", "block")
+        $("#display_char")[0].scrollIntoView()
+      }, 2000);
 
       function numberWithCommas(n) {
           var parts=n.toString().split(".");
           return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-        }
+      }
       function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
       }
-  //to remove _ for display use
-  //     for(var key in x) {
-  //     if(x.hasOwnProperty(key)) {
-  //         key = key.replace(/\_/g,' ')
-  //     }
-  // }
-
-  // function renameKeys (dict, keyMap) {
-  //   return _.reduce(dict, function (newDict, val, oldKey) {
-  //     var newKey
-  //     if (keyMap[oldKey]) {
-  //       newKey = keyMap[oldKey]
-  //     } else {
-  //       newKey = oldKey
-  //     }
-  //     newDict[newKey] = val
-  //     return newDict
-  //   }, {})
-  // }
     }
-
     $scope.removeUnderscore = function(str){
       while (str.includes("_")){
         str = str.replace("_", " ")
@@ -201,6 +203,5 @@ angular.module('overwatch_project').controller(
     $scope.bothActive = function(){
       return $scope.character === "Nope"
     }
-
 
   }])
