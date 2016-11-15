@@ -194,14 +194,18 @@ table{
 }
 
 td{
-	font-size: 2.5vw;
+	font-size: 3vw;
 	font-family: "Big Noodle Titling";
+	padding-left: 1vw;
+	padding-right: 1vw;
 }
 
 #stat{
 	text-align: left;
+	padding-right: 2vw;
 }
 
 #val{
 	text-align: right;
+	padding-left: 2vw;
 }
