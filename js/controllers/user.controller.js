@@ -12,10 +12,6 @@ angular.module('overwatch_project').controller(
       $scope.user2.fullyLoaded = false
       $scope.user.fullyLoaded = false
       if ($("#characterSelect").val() === "None"){
-        $scope.user1.fullyLoaded = false
-        $scope.user2.fullyLoaded = false
-        $scope.user.fullyLoaded = false
-
         $("#error_message1").text("")
         $("#error_message2").text("")
 
