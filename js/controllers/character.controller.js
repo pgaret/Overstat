@@ -4,9 +4,14 @@ angular.module('overwatch_project').controller(
     $scope.character1 = "Empty"
     $scope.character2 = "Empty"
     $scope.img_path = "css/overwatch-logo.jpg"
+
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
+        $("#video").css("display", "block")
+        $("#add_user").css("display", "none")
+        $("#logo").css("display", "none")
+
         $scope.character1.fullyLoaded = false
         $scope.character2.fullyLoaded = false
         if ($("#characterSelect").val() !== "None"){
@@ -95,6 +100,10 @@ angular.module('overwatch_project').controller(
         $scope.a_general_keys = getKeys($scope.character1.data.general_stats)
       }
 
+      $("#video").css("display", "none")
+      $("#add_user").css("display", "block")
+      $("#logo").css("display", "block")
+
       function numberWithCommas(n) {
           var parts=n.toString().split(".");
           return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
@@ -129,5 +138,6 @@ angular.module('overwatch_project').controller(
       }
       return str
     }
+
 
   }])

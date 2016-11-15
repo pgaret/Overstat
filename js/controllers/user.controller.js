@@ -4,11 +4,16 @@ angular.module('overwatch_project').controller(
     $scope.user1 = "Empty"
     $scope.user2 = "Empty"
 
+
   $(function(){
     //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
     $("form").submit(function(){
       $("#error_message1").text("")
       $("#error_message2").text("")
+
+      $("#video").css("display", "block")
+      $("#add_user").css("display", "none")
+      $("#logo").css("display", "none")
 
       $scope.user1.fullyLoaded = false
       $scope.user2.fullyLoaded = false
@@ -149,8 +154,9 @@ angular.module('overwatch_project').controller(
 
     }
 
-
-
+    $("#video").css("display", "none")
+    $("#add_user").css("display", "block")
+    $("#logo").css("display", "block")
 
     function numberWithCommas(n) {
         var parts=n.toString().split(".");
