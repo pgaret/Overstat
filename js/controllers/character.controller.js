@@ -9,11 +9,10 @@ angular.module('overwatch_project').controller(
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
+        $scope.character1.fullyLoaded = false
+        $scope.character2.fullyLoaded = false
+        $scope.character.fullyLoaded = false
         if ($("#characterSelect").val() !== "None"){
-          $scope.character1.fullyLoaded = false
-          $scope.character2.fullyLoaded = false
-          $scope.character.fullyLoaded = false
-
           $("#error_message1").text("")
           $("#error_message2").text("")
 
@@ -59,6 +58,7 @@ angular.module('overwatch_project').controller(
         $scope.character = OneCharacterData($scope.character)
       }
       else if(ready($scope.character1) && ready($scope.character2)){
+        debugger
         getCharacterData()
       }
     })
@@ -111,6 +111,7 @@ angular.module('overwatch_project').controller(
 
     // If one character has data the other doesn't, fills in that data for the other with "N/A"
     getCharacterData = function(){
+  //    debugger
         let character1gk = getKeys($scope.character1.data.general_stats)
         let character2gk = getKeys($scope.character2.data.general_stats)
 

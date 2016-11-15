@@ -8,6 +8,9 @@ angular.module('overwatch_project').controller(
   $(function(){
     //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
     $("form").submit(function(){
+      $scope.user1.fullyLoaded = false
+      $scope.user2.fullyLoaded = false
+      $scope.user.fullyLoaded = false
       if ($("#characterSelect").val() === "None"){
         $scope.user1.fullyLoaded = false
         $scope.user2.fullyLoaded = false
