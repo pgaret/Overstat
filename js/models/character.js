@@ -13,9 +13,11 @@ angular.module('overwatch_project').factory('Character', ['$http', function($htt
         Store.characters.push(scope)
       }, function(error) {
         scope.fullyLoaded = error
-        $("#video").css("display", "none")
-        $("#logo").css("display", "block")
-        $("#add_user").css("display", "block")
+        setTimeout(function() {
+          $("#video").css("display", "none")
+          $("#add_user").css("display", "block")
+          $("#logo").css("display", "block")
+        }, 500);
         $http.get(`https://owapi.net/api/v2/u/${battletag}/stats/general`).success(function() {
           $("#error_message1").text(`${battletag} has never played ${character}!`)
         }).error(function() {

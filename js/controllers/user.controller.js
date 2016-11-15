@@ -110,7 +110,7 @@ angular.module('overwatch_project').controller(
       $(".user_data").css("display", "block")
       $(".character_data").css("display", "block")
       $("#display_user")[0].scrollIntoView()
-    }, 2000);
+    }, 1500);
 
     return user
 
@@ -212,7 +212,7 @@ angular.module('overwatch_project').controller(
       $(".user_data").css("display", "block")
       $(".character_data").css("display", "block")
       $("#display_user")[0].scrollIntoView()
-    }, 2000);
+    }, 1500);
 
     function numberWithCommas(n) {
         var parts=n.toString().split(".");
