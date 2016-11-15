@@ -8,7 +8,20 @@ angular.module('overwatch_project').controller(
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
+        if ($("#characterSelect").val().toLowerCase() === "none") {
+          vid = "css/CharacterVid/reinhardt.webm"
+        }
+        else if ($("#characterSelect").val().toLowerCase() === "soldier: 76") {
+          vid = "css/CharacterVid/soldier76.webm"
+        } else {
+          vid = "css/CharacterVid/" + $("#characterSelect").val().toLowerCase() + ".webm"
+        }
+        $("#source")[0].src = vid
+        $('#video')[0].pause()
+        $('#video')[0].load()
         $("#video").css("display", "block")
+        $(".user_data").css("display", "none")
+        $(".character_data").css("display", "none")
         $("#add_user").css("display", "none")
         $("#logo").css("display", "none")
 
@@ -99,10 +112,15 @@ angular.module('overwatch_project').controller(
       else{
         $scope.a_general_keys = getKeys($scope.character1.data.general_stats)
       }
+      setTimeout(function() {
+        $("#video").css("display", "none")
+        $("#add_user").css("display", "block")
+        $("#logo").css("display", "block")
+        $(".user_data").css("display", "block")
+        $(".character_data").css("display", "block")
+        $("#display_char")[0].scrollIntoView()
+      }, 2000);
 
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
 
       function numberWithCommas(n) {
           var parts=n.toString().split(".");
@@ -111,33 +129,11 @@ angular.module('overwatch_project').controller(
       function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
       }
-  //to remove _ for display use
-  //     for(var key in x) {
-  //     if(x.hasOwnProperty(key)) {
-  //         key = key.replace(/\_/g,' ')
-  //     }
-  // }
-
-  // function renameKeys (dict, keyMap) {
-  //   return _.reduce(dict, function (newDict, val, oldKey) {
-  //     var newKey
-  //     if (keyMap[oldKey]) {
-  //       newKey = keyMap[oldKey]
-  //     } else {
-  //       newKey = oldKey
-  //     }
-  //     newDict[newKey] = val
-  //     return newDict
-  //   }, {})
-  // }
     }
-
     $scope.removeUnderscore = function(str){
       while (str.includes("_")){
         str = str.replace("_", " ")
       }
       return str
     }
-
-
   }])

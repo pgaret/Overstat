@@ -78,8 +78,6 @@ angular.module('overwatch_project').controller(
       $scope.a_game_keys = a_game_keys
       $scope.a_average_keys = a_average_keys
 
-
-
       for (let i = 0; i < a_game_keys.length; i++){
         if (!user1gk.includes(a_game_keys[i])){
           $scope.user1.game_stats[a_game_keys[i]] = ["n/a", 'black']
@@ -154,34 +152,24 @@ angular.module('overwatch_project').controller(
 
     }
 
-    $("#video").css("display", "none")
-    $("#add_user").css("display", "block")
-    $("#logo").css("display", "block")
+    setTimeout(function() {
+      $("#video").css("display", "none")
+      $("#add_user").css("display", "block")
+      $("#logo").css("display", "block")
+      $(".user_data").css("display", "block")
+      $(".character_data").css("display", "block")
+      $("#display_user")[0].scrollIntoView()
+    }, 2000);
 
     function numberWithCommas(n) {
         var parts=n.toString().split(".");
         return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
       }
-
-// function renameKeys (dict, keyMap) {
-//   return _.reduce(dict, function (newDict, val, oldKey) {
-//     var newKey
-//     if (keyMap[oldKey]) {
-//       newKey = keyMap[oldKey]
-//     } else {
-//       newKey = oldKey
-//     }
-//     newDict[newKey] = val
-//     return newDict
-//   }, {})
-// }
   }
-
   $scope.removeUnderscore = function(str){
     while (str.includes("_")){
       str = str.replace("_", " ")
     }
     return str
   }
-
 }])

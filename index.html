@@ -16,8 +16,12 @@
 
     <img id="logo" style="display: block; margin: auto; width: 50%; padding-top: 4%; padding-bottom: 1%;" src="css/overstatv3.png">
 
+    <video id="video" autoplay loop>
+      <source src="css/CharacterVid/reinhardt.webm" id="source" type='video/webm'>
+    </video>
+<!--
     <button id="scope_c">Ch Scope</button>
-    <button id="scope_u">Us Scope</button>
+    <button id="scope_u">Us Scope</button> -->
 
     <form id="add_user" class="" action="#" method="post">
       <p id="error_message1" class="error_message"></p>
@@ -54,7 +58,7 @@
     </form>
 <br>
       <div class="user_data" ng-controller="UserController">
-
+        <span id="display_user"></span>
         <p ng-if="(!user2.fullyLoaded || user2.fullyLoaded === 'error') && user1.fullyLoaded" id="battletag" class="gradient">{{user1.battletag}}</p>
         <p ng-if="user2.fullyLoaded === 'Loaded' && user1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{user1.battletag}} vs {{user2.battletag}}</p>
 
@@ -83,14 +87,10 @@
     </div>
 
     <div class="character_data" ng-controller="CharacterController">
-
+      <span id="display_char"></span>
       <p ng-if="!character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{character1.data.battletag}}</p>
       <p ng-if="character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="battletag" class="gradient">{{character1.data.battletag}} vs {{character2.data.battletag}}</p>
-      <p ng-if="character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" ng-mouseover='consoleLog()' id="character_name" class="gradient">{{character_name}}</p>
-
-      <video id="video" width="750" height="500" style="width: 100%; margin: 0 auto;" autoplay loop>
-        <source src="css/CharacterVid/reinhardt.webm" type="video/webm">
-      </video>
+      <p ng-if="character2.fullyLoaded === 'Loaded' && character1.fullyLoaded === 'Loaded'" id="character_name" class="gradient">{{character_name}}</p>
 
       <table ng-if="character1.fullyLoaded === 'Loaded'">
         <p ng-if="character1.fullyLoaded === 'Loaded'" id="character_name" class="gradient"> Character Stats</p>
