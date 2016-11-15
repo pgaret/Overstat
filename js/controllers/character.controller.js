@@ -58,7 +58,6 @@ angular.module('overwatch_project').controller(
         $scope.character = OneCharacterData($scope.character)
       }
       else if(ready($scope.character1) && ready($scope.character2)){
-        debugger
         getCharacterData()
       }
     })
@@ -111,7 +110,6 @@ angular.module('overwatch_project').controller(
 
     // If one character has data the other doesn't, fills in that data for the other with "N/A"
     getCharacterData = function(){
-  //    debugger
         let character1gk = getKeys($scope.character1.data.general_stats)
         let character2gk = getKeys($scope.character2.data.general_stats)
 
