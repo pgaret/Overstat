@@ -3,20 +3,29 @@ angular.module('overwatch_project').controller(
     //Set up the characters so that I can call on them later without getting errors
     $scope.character1 = "Empty"
     $scope.character2 = "Empty"
+    $scope.character = "Empty"
     $scope.img_path = "css/overwatch-logo.jpg"
 
     $(function(){
       //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
       $("form").submit(function(){
-        $("#video").css("display", "block")
-        $("#add_user").css("display", "none")
-        $("#logo").css("display", "none")
-
-        $scope.character1.fullyLoaded = false
-        $scope.character2.fullyLoaded = false
         if ($("#characterSelect").val() !== "None"){
+          $scope.character1.fullyLoaded = false
+          $scope.character2.fullyLoaded = false
+          $scope.character.fullyLoaded = false
+
+          $("#error_message1").text("")
+          $("#error_message2").text("")
+
+          $scope.isOne = $("#inputUser1").val()
+          $scope.isTwo = $("#inputUser2").val()
+
+          $("#video").css("display", "block")
+          $("#add_user").css("display", "none")
+          $("#logo").css("display", "none")
+
           $scope.character_name = $("#characterSelect").val()
-          $("form").css("margin", "0 auto")
+
           event.preventDefault()
           createCharacters()
         }
@@ -24,9 +33,19 @@ angular.module('overwatch_project').controller(
       //Create the users - set them up in $scope, see user.js for model details
       function createCharacters(){
         char_name = $("#characterSelect").val().toLowerCase()
-        $scope.character1 = new Character($("#inputUser1").val().replace("#", "-"), char_name)
-        if ($("#inputUser2").val() !== ""){
-          $scope.character2 = new Character($("#inputUser2").val().replace("#", "-"), char_name)
+        //      debugger
+        if ($scope.isOne === "" && $scope.isTwo !== ""){
+          $scope.character = new Character($scope.isTwo.replace("#", "-"), char_name)
+          $scope.character1 = "Nope"; $scope.character2 = "Nope"
+        }
+        else if ($scope.isOne !== "" && $scope.isTwo === ""){
+          $scope.character = new Character($scope.isOne.replace("#", "-"), char_name)
+          $scope.character1 = "Nope"; $scope.character2 = "Nope"
+        }
+        else{
+          $scope.character1 = new Character($scope.isOne.replace("#", "-"), char_name)
+          $scope.character2 = new Character($scope.isTwo.replace("#", "-"), char_name)
+          $scope.character = "Nope"
         }
       }
       $("#scope_c").click(function(){
@@ -34,14 +53,26 @@ angular.module('overwatch_project').controller(
       })
     })
 
-    $scope.$watch('[character1.fullyLoaded, character2.fullyLoaded]', function(){
-        if ($scope.character1.fullyLoaded && ($scope.character2.fullyLoaded || $("#inputUser2").val() === "")){
-          getCharacterData()
-        }
-        else {
-
-        }
+    $scope.$watch('[character.fullyLoaded, character1.fullyLoaded, character2.fullyLoaded]', function(){
+      //debugger
+      if ($scope.character !== "Nope" && ready($scope.character)){
+        $scope.character = OneCharacterData($scope.character)
+      }
+      else if(ready($scope.character1) && ready($scope.character2)){
+        getCharacterData()
+      }
     })
+
+    //Check if the character is ready to have their keys analyzed
+    ready = function(character){
+      if (character){
+        if (character.fullyLoaded)
+          if (character.fullyLoaded !== 'error' && character.fullyLoaded !== false ){
+            return true
+          }
+      }
+      return false
+    }
     //Grabs the keys for any given dictionary and returns them in array form
     getKeys = function(data){
       let keys = []
@@ -57,9 +88,29 @@ angular.module('overwatch_project').controller(
       })
     }
 
+    OneCharacterData = function(character){
+      $scope.a_general_keys = getKeys(character.data.general_stats)
+
+      for (stat in character.data.general_stats){
+        character.data.general_stats[stat] = standardize(character.data.general_stats[stat])
+      }
+
+      $("#video").css("display", "none")
+      $("#add_user").css("display", "block")
+      $("#logo").css("display", "block")
+
+      return character
+
+    }
+
+    function standardize(n) {
+        let parts=n.toString().split(".");
+        parts= parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        return +parseFloat(parts).toFixed(2)
+      }
+
     // If one character has data the other doesn't, fills in that data for the other with "N/A"
     getCharacterData = function(){
-      if ($("#inputUser2").val() !== ""){
         let character1gk = getKeys($scope.character1.data.general_stats)
         let character2gk = getKeys($scope.character2.data.general_stats)
 
@@ -94,11 +145,6 @@ angular.module('overwatch_project').controller(
             }
           }
         }
-
-      }
-      else{
-        $scope.a_general_keys = getKeys($scope.character1.data.general_stats)
-      }
 
       $("#video").css("display", "none")
       $("#add_user").css("display", "block")
@@ -137,6 +183,22 @@ angular.module('overwatch_project').controller(
         str = str.replace("_", " ")
       }
       return str
+    }
+
+    $scope.allready = function(){
+      if ($scope.character !== "Nope"){
+        if ($scope.character.fullyLoaded === 'Loaded'){
+          return true
+        }
+      }
+      else if($scope.character1.fullyLoaded === 'Loaded' && $scope.character2.fullyLoaded === 'Loaded'){
+        return true
+      }
+      return false
+    }
+
+    $scope.bothActive = function(){
+      return $scope.character === "Nope"
     }
 
 

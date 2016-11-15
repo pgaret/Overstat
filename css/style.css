@@ -54,7 +54,8 @@ select {
 .error_message{
 	font-family: "Big Noodle Titling";
 	color: red;
-	font-size: 2vw;
+	font-size: 3vw;
+	padding-bottom: 2%;
 }
 
 input[type="text"] {
@@ -133,7 +134,7 @@ input[type="submit"]:hover{
 }
 
 input[type="submit"]:click{
-	
+
 }
 
 #battletag{
