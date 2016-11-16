@@ -1,246 +1,103 @@
-angular.module('overwatch_project').controller(
-  'UserController', ['$scope', 'User', function($scope, User){
-    //Set up the users so that I can call on them later without getting errors
-    $scope.user1 = "Empty"
-    $scope.user2 = "Empty"
-    $scope.user = "Empty"
+$(function(){
 
-  $(function(){
-    //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
-    $("form").submit(function(){
-      $scope.user1.fullyLoaded = false
-      $scope.user2.fullyLoaded = false
-      $scope.user.fullyLoaded = false
-      if ($("#characterSelect").val() === "None"){
-        $scope.user1.fullyLoaded = false
-        $scope.user2.fullyLoaded = false
-        $scope.user.fullyLoaded = false
+})
+user = function(){
+  return Store.users[Store.users.length - 1]
+}
+otheruser = function(){
+  return Store.users[Store.users.length - 2]
+}
 
-        $("#error_message1").text("")
-        $("#error_message2").text("")
 
-        $scope.isOne = $("#inputUser1").val()
-        $scope.isTwo = $("#inputUser2").val()
-
-        $("#video").css("display", "block")
-        $("#add_user").css("display", "none")
-        $("#logo").css("display", "none")
-
-        event.preventDefault()
-        createUsers()
-      }
-    })
-    //Create the users - set them up in $scope, see user.js for model details
-    function createUsers(){
-//      debugger
-      if ($scope.isOne === "" && $scope.isTwo !== ""){
-        $scope.user = new User($scope.isTwo.replace("#", "-"))
-        $scope.user1 = "Nope"; $scope.user2 = "Nope"
-      }
-      else if ($scope.isOne !== "" && $scope.isTwo === ""){
-        $scope.user = new User($scope.isOne.replace("#", "-"))
-        $scope.user1 = "Nope"; $scope.user2 = "Nope"
-      }
-      else{
-        $scope.user1 = new User($scope.isOne.replace("#", "-"))
-        $scope.user2 = new User($scope.isTwo.replace("#", "-"))
-        $scope.user = "Nope"
-      }
-    }
-    //Button that lets me access $scope whenever I feel like it
-    $("#scope_u").click(function(){
-      console.log($scope);
-    })
-  })
-
-  //Put a watch on whether the users are loaded, if so it's time to compile data
-  $scope.$watch('[user.fullyLoaded, user1.fullyLoaded, user2.fullyLoaded]', function(){
-  //  debugger
-    if ($scope.user !== "Nope" && ready($scope.user)){
-      $scope.user = OneUserData($scope.user)
-    }
-    else if(ready($scope.user1) && ready($scope.user2)){
-      getUserData()
-    }
-  })
-
-  //Check if the user is ready to have their keys analyzed
-  ready = function(user){
-    if (user){
-      if (user.fullyLoaded)
-        if (user.fullyLoaded !== 'error' && user.fullyLoaded !== false && user != "Nope"){
-          return true
-        }
-    }
-    return false
+parseStat = function(stat){
+  while (stat.includes("_")){
+    stat = stat.replace("_", " ")
   }
+  return stat
+}
 
-  //Grabs the keys for any given dictionary and returns them in array form
-  getKeys = function(data){
-    let keys = []
+toHTML = function(data, data2){
+  str = "<table>"
+  if (!data2){
     for (stat in data){
-      keys.push(stat)
+      str += `<tr><td>${parseStat(stat)}</td><td>${data[stat]}</td></tr>`
     }
-    return keys.sort()
   }
-  //Takes in an array, returns that array without duplicate entries
-  uniq = function (a) {
-    return a.sort().filter(function(item, pos, ary) {
-        return !pos || item != ary[pos - 1];
+  else{
+    for (stat in data){
+      if (data[stat] === undefined){
+        str += `<tr><td style="color: red;">0</td><td>${parseStat(stat)}</td><td style="color: green;">${data2[stat]}</td></tr>`
+      }
+      else if (data2[stat] === undefined){
+        str += `<tr><td style="color: green;">${data[stat]}</td><td>${parseStat(stat)}</td><td style="color: red;">0</td></tr>`
+      }
+      else if (data[stat] > data2[stat]){
+        str += `<tr><td style="color: green;">${data[stat]}</td><td>${parseStat(stat)}</td><td style="color: red;">${data2[stat]}</td></tr>`
+      }
+      else {
+        str += `<tr><td style="color: red;">${data[stat]}</td><td>${parseStat(stat)}</td><td style="color: green;">${data2[stat]}</td></tr>`
+      }
+    }
+  }
+  str += "</table>"
+  return str
+}
+
+empty = function(){
+  $("#average_data").empty();
+  $("#game_data").empty();
+  $("#character_data").empty();
+}
+
+function viewData(mode, type, battletag1, battletag2){
+  // debugger
+  if (battletag1){
+    if (battletag2){
+      $.when(
+        window[mode](battletag1),
+        window[mode](battletag2)
+      ).then(function(){
+        empty()
+        $("#"+type).append(toHTML(user[type], otheruser()[type]))
+      })
+    }
+    else {
+      window[mode](battletag1).done(function(){
+        empty()
+        $("#"+type).append(toHTML(user[type], null))
+      })
+    }
+  }
+  else{
+    window[mode](battletag2).done(function(){
+      empty()
+      $("#"+type).append(toHTML(user[type], null))
     })
   }
+}
 
-  OneUserData = function(user){
-//    debugger
-    $scope.a_game_keys = getKeys(user.game_stats)
-    $scope.a_average_keys = getKeys(user.average_stats)
-
-
-    for (stat in $scope.user.game_stats){
-      user.game_stats[stat] = standardize(user.game_stats[stat])
-    }
-    for (stat in $scope.user.average_stats){
-      user.average_stats[stat] = standardize(user.average_stats[stat])
-    }
-
-    setTimeout(function() {
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
-      $(".user_data").css("display", "block")
-      $(".character_data").css("display", "block")
-      $("#display_user")[0].scrollIntoView()
-    }, 1500);
-
-    return user
-
+function router(toDo){
+  input1 = $("#battletag1").val()
+  input2 = $("#battletag2").val()
+  // debugger
+  if (toDo === 'character_data'){
+    mode = "heroAdapter"
+  }
+  else{
+    mode = "userAdapter"
   }
 
-  function standardize(n) {
-      let parts=n.toString().split(".");
-      parts= parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-      return +parseFloat(parts).toFixed(2)
-    }
-
-  // If one user has data the other doesn't, fills in that data for the other with "N/A"
-  getUserData = function(){
-//    debugger
-      let user1gk = getKeys($scope.user1.game_stats)
-      let user2gk = getKeys($scope.user2.game_stats)
-      let user1ak = getKeys($scope.user1.average_stats)
-      let user2ak = getKeys($scope.user2.average_stats)
-
-      let a_game_keys = uniq(user1gk.concat(user2gk))
-      let a_average_keys = uniq(user1ak.concat(user2ak))
-
-      //Now we know all the stats we want to display, so put that in scope
-      $scope.a_game_keys = a_game_keys
-      $scope.a_average_keys = a_average_keys
-
-      for (let i = 0; i < a_game_keys.length; i++){
-        if (!user1gk.includes(a_game_keys[i])){
-          $scope.user1.game_stats[a_game_keys[i]] = ["n/a", 'black']
-          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]]]
-        }
-        if (!user2gk.includes(a_game_keys[i])){
-          $scope.user2.game_stats[a_game_keys[i]] = ["n/a", 'black']
-          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]]]
-        }
-
-        // LOGIC FOR COLORS HERE
-        if (user1gk.includes(a_game_keys[i]) && user2gk.includes(a_game_keys[i])) {
-          if(+parseFloat($scope.user1.game_stats[a_game_keys[i]]).toFixed(2) === +parseFloat($scope.user2.game_stats[a_game_keys[i]]).toFixed(2)) {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'black']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'black']
-          }
-          else if (parseFloat($scope.user1.game_stats[a_game_keys[i]]) > parseFloat(+$scope.user2.game_stats[a_game_keys[i]])) {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'green']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'red']
-          }
-
-          else {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'red']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'green']
-          }
-        }
-      }
-
-      for (let i = 0; i < a_average_keys.length; i++){
-        if (!user1ak.includes(a_average_keys[i])){
-          $scope.user1.average_stats[a_average_keys[i]] = ["n/a", 'black']
-          $scope.user2.average_stats[a_average_keys[i]] = [$scope.user2.average_stats[a_average_keys[i]]]
-        }
-        if (!user2ak.includes(a_average_keys[i])){
-          $scope.user2.average_stats[a_average_keys[i]] = ["n/a", 'black']
-          $scope.user1.average_stats[a_average_keys[i]] = [$scope.user1.average_stats[a_average_keys[i]]]
-        }
-        // LOGIC FOR COLORS HERE
-        if (user1ak.includes(a_average_keys[i]) && user2ak.includes(a_average_keys[i])) {
-          if(+parseFloat($scope.user1.average_stats[a_average_keys[i]]).toFixed(2) === +parseFloat($scope.user2.average_stats[a_average_keys[i]]).toFixed(2)) {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'black']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'black']
-          }
-          else if (parseFloat($scope.user1.average_stats[a_average_keys[i]]) > parseFloat(+$scope.user2.average_stats[a_average_keys[i]])) {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'green']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'red']
-          }
-
-          else {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'red']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'green']
-          }
-        }
-      }
-      //
-      // for (let i = 0; i < a_avg_keys.length; i++){
-      //   if (!user1ak.includes(a_avg_keys[i])){
-      //     $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
-      //   } else {
-      //     $scope.user1.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user1.average_stats[a_avg_keys[i]].toFixed(2))
-      //   }
-      //   if (!user2ak.includes(a_avg_keys[i])){
-      //     $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
-      //   } else {
-      //     $scope.user2.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user2.average_stats[a_avg_keys[i]].toFixed(2))
-      //   }
-      // }
-
-    setTimeout(function() {
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
-      $(".user_data").css("display", "block")
-      $(".character_data").css("display", "block")
-      $("#display_user")[0].scrollIntoView()
-    }, 1500);
-
-    function numberWithCommas(n) {
-        var parts=n.toString().split(".");
-        parts = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-        return +parseFloat(parts).toFixed(2)
-      }
+  if (input1 !== "" && input2 !== ""){
+    viewData(mode, toDo, input1, input2)
   }
-  $scope.removeUnderscore = function(str){
-    while (str.includes("_")){
-      str = str.replace("_", " ")
-    }
-    return str
+  else if (input1 !== ""){
+    viewData(mode, toDo, input1, null)
+  }
+  else if (input2 !== ""){
+    viewData(mode, toDo, input2, null)
+  }
+  else {
+    console.log("Nobody home")
   }
 
-  $scope.allready = function(){
-    if ($scope.user !== "Nope"){
-      if ($scope.user.fullyLoaded === 'Loaded'){
-        return true
-      }
-    }
-    else if($scope.user1.fullyLoaded === 'Loaded' && $scope.user2.fullyLoaded === 'Loaded'){
-      return true
-    }
-    return false
-  }
-
-  $scope.bothActive = function(){
-    return $scope.user === "Nope"
-  }
-
-}])
+}
