@@ -1,242 +1,152 @@
-angular.module('overwatch_project').controller(
-  'UserController', ['$scope', 'User', function($scope, User){
-    //Set up the users so that I can call on them later without getting errors
-    $scope.user1 = "Empty"
-    $scope.user2 = "Empty"
-    $scope.user = "Empty"
+//Basic control flow:
+// 1. router function takes in user input, determines how many users and what data they want to see
+// 2. viewData function makes the API calls and passes the resulting data to the toHTML function
+// 3. toHTML converts the data into HTML strings and returns it to viewData
+// 4. viewData appends those HTML strings to the relevant container
 
-  $(function(){
-    //If the search option is submitted, we need to create 1 or 2 users without refreshing the page
-    $("form").submit(function(){
-      $scope.user1.fullyLoaded = false
-      $scope.user2.fullyLoaded = false
-      $scope.user.fullyLoaded = false
-      if ($("#characterSelect").val() === "None"){
-        $("#error_message1").text("")
-        $("#error_message2").text("")
+//Other notes
+// - toHTML executes the comparison and changes the text color
+// - the API returns some pretty weird strings (ie time can be 00:30, 30 minutes, )
 
-        $scope.isOne = $("#inputUser1").val()
-        $scope.isTwo = $("#inputUser2").val()
+//Gets the most recently added user
+user = function(){
+  return Store.users[Store.users.length - 1]
+}
+//Gets the second most recently added user, for the 2-user use case
+otheruser = function(){
+  return Store.users[Store.users.length - 2]
+}
 
-        $("#video").css("display", "block")
-        $("#add_user").css("display", "none")
-        $("#logo").css("display", "none")
-
-        event.preventDefault()
-        createUsers()
-      }
-    })
-    //Create the users - set them up in $scope, see user.js for model details
-    function createUsers(){
-//      debugger
-      if ($scope.isOne === "" && $scope.isTwo !== ""){
-        $scope.user = new User($scope.isTwo.replace("#", "-"))
-        $scope.user1 = "Nope"; $scope.user2 = "Nope"
-      }
-      else if ($scope.isOne !== "" && $scope.isTwo === ""){
-        $scope.user = new User($scope.isOne.replace("#", "-"))
-        $scope.user1 = "Nope"; $scope.user2 = "Nope"
-      }
-      else{
-        $scope.user1 = new User($scope.isOne.replace("#", "-"))
-        $scope.user2 = new User($scope.isTwo.replace("#", "-"))
-        $scope.user = "Nope"
-      }
-    }
-    //Button that lets me access $scope whenever I feel like it
-    $("#scope_u").click(function(){
-      console.log($scope);
-    })
-  })
-
-  //Put a watch on whether the users are loaded, if so it's time to compile data
-  $scope.$watch('[user.fullyLoaded, user1.fullyLoaded, user2.fullyLoaded]', function(){
-  //  debugger
-    if ($scope.user !== "Nope" && ready($scope.user)){
-      $scope.user = OneUserData($scope.user)
-    }
-    else if(ready($scope.user1) && ready($scope.user2)){
-      getUserData()
-    }
-  })
-
-  //Check if the user is ready to have their keys analyzed
-  ready = function(user){
-    if (user){
-      if (user.fullyLoaded)
-        if (user.fullyLoaded !== 'error' && user.fullyLoaded !== false && user != "Nope"){
-          return true
-        }
-    }
-    return false
+//Stats come from the API with underscores instead of spaces, we fix that here for display purposes
+parseStat = function(stat){
+  while (stat.includes("_")){
+    stat = stat.replace("_", " ")
   }
+  return stat
+}
 
-  //Grabs the keys for any given dictionary and returns them in array form
-  getKeys = function(data){
-    let keys = []
+parseData = function(data){
+  var parts= String(+parseFloat(data).toFixed(2)).split(".")
+  parts = String(parts[0]).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+  return parts
+}
+
+//We take in two data sets, check whether there is one or two users,
+//then appropriately display them using a table
+//The coloration also takes place here (does not deal with some string-based edge cases
+//as the data came in with some really strange time formatting)
+toHTML = function(data, data2){
+  str = "<table>"
+  //If there is only one user, display in two columns the stats and values, in black
+  if (!data2){
     for (stat in data){
-      keys.push(stat)
+      console.log(data[stat])
+      str += `<tr><td>${parseStat(stat)}</td><td>${parseData(data[stat])}</td></tr>`
     }
-    return keys.sort()
   }
-  //Takes in an array, returns that array without duplicate entries
-  uniq = function (a) {
-    return a.sort().filter(function(item, pos, ary) {
-        return !pos || item != ary[pos - 1];
+  //Display the stats - if one user has a stat the other doesn't, display zero.
+  //Otherwise, color the stat appropriately based on the comparison
+  else{
+    for (stat in data){
+      if (data[stat] === undefined){
+        str += `<tr><td style="color: red;">0</td><td>${parseStat(stat)}</td><td style="color: green;">${data2[stat]}</td></tr>`
+      }
+      else if (data2[stat] === undefined){
+        str += `<tr><td style="color: green;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: red;">0</td></tr>`
+      }
+      else if (data[stat] > data2[stat]){
+        str += `<tr><td style="color: green;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: red;">${parseData(data2[stat])}</td></tr>`
+      }
+      else {
+        str += `<tr><td style="color: red;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: green;">${parseData(data2[stat])}</td></tr>`
+      }
+    }
+  }
+  str += "</table>"
+  return str
+}
+
+//Checks whether 1 or 2 people and makes sure player 1 and player 2 can both show independently
+//Calls the toHTML function which returns the formatted data for HTML and appends it to the relevant container
+function viewData(mode, type, battletag1, battletag2){
+  if (battletag1){
+    if (battletag2){
+      $.when(
+        window[mode](battletag1),
+        window[mode](battletag2)
+      ).then(function(){
+        battletag1 === user.battletag ? $("#"+type).append(toHTML(user[type], otheruser()[type])) : $("#"+type).append(toHTML(otheruser()[type], user[type]))
+      })
+    }
+    else {
+      window[mode](battletag1).done(function(){
+        $("#"+type).append(toHTML(user[type], null))
+      })
+    }
+  }
+  else{
+    window[mode](battletag2).done(function(){
+      $("#"+type).append(toHTML(user[type], null))
     })
   }
+}
 
-  OneUserData = function(user){
-//    debugger
-    $scope.a_game_keys = getKeys(user.game_stats)
-    $scope.a_average_keys = getKeys(user.average_stats)
+//Takes in the battletags and uses the adapters to grab their data, before shipping
+//off the data to the viewData function
+function router(toDo){
+  input1 = $("#battletag1").val()
+  input2 = $("#battletag2").val()
 
-
-    for (stat in $scope.user.game_stats){
-      user.game_stats[stat] = standardize(user.game_stats[stat])
-    }
-    for (stat in $scope.user.average_stats){
-      user.average_stats[stat] = standardize(user.average_stats[stat])
-    }
-
-    setTimeout(function() {
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
-      $(".user_data").css("display", "block")
-      $(".character_data").css("display", "block")
-      $("#display_user")[0].scrollIntoView()
-    }, 1500);
-
-    return user
-
+  // debugger
+  if (toDo === 'character_data'){
+    mode = "heroAdapter"
+    showVideo("hero")
+  }
+  else{
+    mode = "userAdapter"
+    showVideo("user")
   }
 
-  function standardize(n) {
-      let parts=n.toString().split(".");
-      parts= parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-      return +parseFloat(parts).toFixed(2)
-    }
-
-  // If one user has data the other doesn't, fills in that data for the other with "N/A"
-  getUserData = function(){
-//    debugger
-      let user1gk = getKeys($scope.user1.game_stats)
-      let user2gk = getKeys($scope.user2.game_stats)
-      let user1ak = getKeys($scope.user1.average_stats)
-      let user2ak = getKeys($scope.user2.average_stats)
-
-      let a_game_keys = uniq(user1gk.concat(user2gk))
-      let a_average_keys = uniq(user1ak.concat(user2ak))
-
-      //Now we know all the stats we want to display, so put that in scope
-      $scope.a_game_keys = a_game_keys
-      $scope.a_average_keys = a_average_keys
-
-      for (let i = 0; i < a_game_keys.length; i++){
-        if (!user1gk.includes(a_game_keys[i])){
-          $scope.user1.game_stats[a_game_keys[i]] = ["n/a", 'black']
-          $scope.user2.game_stats[a_game_keys[i]] = [$scope.user2.game_stats[a_game_keys[i]]]
-        }
-        if (!user2gk.includes(a_game_keys[i])){
-          $scope.user2.game_stats[a_game_keys[i]] = ["n/a", 'black']
-          $scope.user1.game_stats[a_game_keys[i]] = [$scope.user1.game_stats[a_game_keys[i]]]
-        }
-
-        // LOGIC FOR COLORS HERE
-        if (user1gk.includes(a_game_keys[i]) && user2gk.includes(a_game_keys[i])) {
-          if(+parseFloat($scope.user1.game_stats[a_game_keys[i]]).toFixed(2) === +parseFloat($scope.user2.game_stats[a_game_keys[i]]).toFixed(2)) {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'black']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'black']
-          }
-          else if (parseFloat($scope.user1.game_stats[a_game_keys[i]]) > parseFloat(+$scope.user2.game_stats[a_game_keys[i]])) {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'green']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'red']
-          }
-
-          else {
-            $scope.user1.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user1.game_stats[a_game_keys[i]].toFixed(2)), 'red']
-            $scope.user2.game_stats[a_game_keys[i]] = [numberWithCommas(+$scope.user2.game_stats[a_game_keys[i]].toFixed(2)), 'green']
-          }
-        }
-      }
-
-      for (let i = 0; i < a_average_keys.length; i++){
-        if (!user1ak.includes(a_average_keys[i])){
-          $scope.user1.average_stats[a_average_keys[i]] = ["n/a", 'black']
-          $scope.user2.average_stats[a_average_keys[i]] = [$scope.user2.average_stats[a_average_keys[i]]]
-        }
-        if (!user2ak.includes(a_average_keys[i])){
-          $scope.user2.average_stats[a_average_keys[i]] = ["n/a", 'black']
-          $scope.user1.average_stats[a_average_keys[i]] = [$scope.user1.average_stats[a_average_keys[i]]]
-        }
-        // LOGIC FOR COLORS HERE
-        if (user1ak.includes(a_average_keys[i]) && user2ak.includes(a_average_keys[i])) {
-          if(+parseFloat($scope.user1.average_stats[a_average_keys[i]]).toFixed(2) === +parseFloat($scope.user2.average_stats[a_average_keys[i]]).toFixed(2)) {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'black']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'black']
-          }
-          else if (parseFloat($scope.user1.average_stats[a_average_keys[i]]) > parseFloat(+$scope.user2.average_stats[a_average_keys[i]])) {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'green']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'red']
-          }
-
-          else {
-            $scope.user1.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user1.average_stats[a_average_keys[i]].toFixed(2)), 'red']
-            $scope.user2.average_stats[a_average_keys[i]] = [numberWithCommas(+$scope.user2.average_stats[a_average_keys[i]].toFixed(2)), 'green']
-          }
-        }
-      }
-      //
-      // for (let i = 0; i < a_avg_keys.length; i++){
-      //   if (!user1ak.includes(a_avg_keys[i])){
-      //     $scope.user1.average_stats[a_avg_keys[i]] = "n/a"
-      //   } else {
-      //     $scope.user1.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user1.average_stats[a_avg_keys[i]].toFixed(2))
-      //   }
-      //   if (!user2ak.includes(a_avg_keys[i])){
-      //     $scope.user2.average_stats[a_avg_keys[i]] = "n/a"
-      //   } else {
-      //     $scope.user2.average_stats[a_avg_keys[i]] = numberWithCommas(+$scope.user2.average_stats[a_avg_keys[i]].toFixed(2))
-      //   }
-      // }
-
-    setTimeout(function() {
-      $("#video").css("display", "none")
-      $("#add_user").css("display", "block")
-      $("#logo").css("display", "block")
-      $(".user_data").css("display", "block")
-      $(".character_data").css("display", "block")
-      $("#display_user")[0].scrollIntoView()
-    }, 1500);
-
-    function numberWithCommas(n) {
-        var parts=n.toString().split(".");
-        parts = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-        return +parseFloat(parts).toFixed(2)
-      }
+  if (input1 !== "" && input2 !== ""){
+    viewData(mode, toDo, input1, input2)
   }
-  $scope.removeUnderscore = function(str){
-    while (str.includes("_")){
-      str = str.replace("_", " ")
-    }
-    return str
+  else if (input1 !== ""){
+    viewData(mode, toDo, input1, null)
+  }
+  else if (input2 !== ""){
+    viewData(mode, toDo, input2, null)
+  }
+  else {
+    console.log("Nobody home")
   }
 
-  $scope.allready = function(){
-    if ($scope.user !== "Nope"){
-      if ($scope.user.fullyLoaded === 'Loaded'){
-        return true
-      }
-    }
-    else if($scope.user1.fullyLoaded === 'Loaded' && $scope.user2.fullyLoaded === 'Loaded'){
-      return true
-    }
-    return false
-  }
+}
 
-  $scope.bothActive = function(){
-    return $scope.user === "Nope"
+function showVideo(mode){
+  // debugger
+  if (mode === "user")
+  {
+    let heroes = ["Ana","Bastion","D.VA","Genji","Hanzo","Junkrat","Lucio","McCree","Mei","Mercy","Pharah","Reaper","Reinhardt","Roadhog","soldier76","Symmetra","Torbjorn","Tracer","Widowmaker","Winston","Zarya","Zenyatta"]
+    let hero = heroes[Math.floor(Math.random()*heroes.length)]
+    var vid_name = "css/CharacterVid/" + hero.toLowerCase() + ".webm"
+  } else {
+    var vid_name = $("#selectCharacter").val().toLowerCase()
+    if (vid_name === "soldier: 76"){
+      vid_name = "css/CharacterVid/soldier76.webm"
+    } else {
+      vid_name = "css/CharacterVid/" + $("#selectCharacter").val().toLowerCase() + ".webm"
+    }
   }
+  $("#source")[0].src = vid_name
+  $('#video')[0].pause()
+  $('#video')[0].load()
+  $("#average_data").empty()
+  $("#game_data").empty()
+  $("#character_data").empty()
+  $("#average_data").css("display", "none")
+  $("#game_data").css("display", "none")
+  $("#character_data").css("display", "none")
+  $("#header").css("display", "none")
+  $("#video").css("display", "block")
 
-}])
+}

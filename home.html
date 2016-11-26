@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <div id="header">
+
+       <img id="logo" style="display: block; margin: auto; width: 50%; padding-top: 4%; padding-bottom: 1%;" src="css/overstatv3.png">
+
+       <div id="userForm">
+         <input id="battletag1" type="text" placeholder="Battletag 1"></input>
+         <input id="battletag2" type="text" placeholder="Battletag 2"></input>
+         <br><br>
+
+         <button id="routeButton" class="btn btn-default" onclick="router('average_data')">Average Data</button>
+         <button id="routeButton" class="btn btn-default" onclick="router('game_data')">Aggregate Data</button>
+         <button id="routeButton" class="btn btn-default" onclick="router('character_data')">Character Data</button>
+
+         <select id="selectCharacter" class="dropbtn"><option>Ana</option><option>Bastion</option>
+           <option>D.VA</option><option>Genji</option><option>Hanzo</option><option>Junkrat</option>
+           <option>Lucio</option><option>McCree</option><option>Mei</option><option>Mercy</option>
+           <option>Pharah</option><option>Reaper</option><option>Reinhardt</option><option>Roadhog</option>
+           <option>Soldier: 76</option><option>Symmetra</option><option>Torbjorn</option><option>Tracer</option>
+           <option>Widowmaker</option><option>Winston</option><option>Zarya</option><option>Zenyatta</option>
+         </select>
+      </div>
+    </div>
+
+
+    <video id="video" autoplay loop>
+      <source src="css/CharacterVid/reinhardt.webm" id="source" type='video/webm'>
+    </video>
+
+    <div id="average_data"></div>
+
+    <div id="game_data"></div>
+
+    <div id="character_data"></div>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="js/models/user.js" charset="utf-8"></script>
+    <script src="js/adapter.js" charset="utf-8"></script>
+    <script src="js/store.js" charset="utf-8"></script>
+    <script src="js/app.js" charset="utf-8"></script>
+    <script src="js/controllers/user.controller.js" charset="utf-8"></script>
+
+  </body>
+</html>
