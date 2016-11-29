@@ -32,34 +32,57 @@ parseData = function(data){
   return parts
 }
 
+statsToArr = function(data) {
+  stats = []
+  for (dat in data) {
+    stats.push(dat)
+  }
+  return stats
+}
+
 //We take in two data sets, check whether there is one or two users,
 //then appropriately display them using a table
 //The coloration also takes place here (does not deal with some string-based edge cases
 //as the data came in with some really strange time formatting)
-toHTML = function(data, data2){
-  str = "<table>"
+toHTML = function(data, data2, b1, b2){
+  let stats = statsToArr(data)
+  let stats2 = statsToArr(data2)
+  // console.log(b2)
+  let str = "";
+  // debugger
   //If there is only one user, display in two columns the stats and values, in black
   if (!data2){
-    for (stat in data){
-      console.log(data[stat])
-      str += `<tr><td>${parseStat(stat)}</td><td>${parseData(data[stat])}</td></tr>`
+    str += `<div class="displaybattletag">${b1}</div><table>`
+    for (let i = 0; i < stats.length; i++){
+      str += `<tr><td style='text-align: left'>${parseStat(data[stats[i]])}</td><td style='text-align: right'>${parseData(data[stat])}</td></tr>`
+    }
+  }
+  else if (!data) {
+    str += `<div class="displaybattletag">${b2}</div><table>`
+      for (let i = 0; i < stats2.length; i++){
+        str += `<tr><td style='text-align: left'>${parseStat(data2[stats2[i]])}</td><td style='text-align: right'>${parseData(data[stat])}</td></tr>`
     }
   }
   //Display the stats - if one user has a stat the other doesn't, display zero, and color is black.
   //Otherwise, color the stat appropriately based on the comparison.
   else{
-    for (stat in data){
-      if (data[stat] === undefined){
-        str += `<tr><td style="color: black;">0</td><td>${parseStat(stat)}</td><td style="color: black;">${data2[stat]}</td></tr>`
+    str += `<div class="displaybattletag">${b1} vs ${b2}</div><table>`
+    let stats3 = _.union(stats, stats2).sort()
+    for (let i = 0; i < stats3.length; i++){
+      if (data[stats3[i]] === undefined){
+        str += `<tr><td style="color: black; text-align: left">0</td><td style='text-align: center'>${parseStat(stats3[i])}</td><td style="color: black; text-align: right">${data2[stats3[i]]}</td></tr>`
       }
-      else if (data2[stat] === undefined){
-        str += `<tr><td style="color: black;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: black;">0</td></tr>`
+      else if (data2[stats3[i]] === undefined){
+        str += `<tr><td style="color: black; text-align: left">${parseData(data[stats3[i]])}</td><td style='text-align: center'>${parseStat(stats3[i])}</td><td style="color: black; text-align: right">0</td></tr>`
       }
-      else if (data[stat] > data2[stat]){
-        str += `<tr><td style="color: green;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: red;">${parseData(data2[stat])}</td></tr>`
+      else if (data[stats3[i]] > data2[stats3[i]]){
+        str += `<tr><td style="color: green; text-align: left">${parseData(data[stats3[i]])}</td><td style='text-align: center'>${parseStat(stats3[i])}</td><td style="color: red; text-align: right">${parseData(data2[stats3[i]])}</td></tr>`
+      }
+      else if (data[stats3[i]] < data2[stats3[i]]) {
+        str += `<tr><td style="color: red; text-align: left">${parseData(data[stats3[i]])}</td><td style='text-align: center'>${parseStat(stats3[i])}</td><td style="color: green; text-align: right">${parseData(data2[stats3[i]])}</td></tr>`
       }
       else {
-        str += `<tr><td style="color: red;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: green;">${parseData(data2[stat])}</td></tr>`
+        str += `<tr><td style="color: black; text-align: left">${parseData(data[stats3[i]])}</td><td style='text-align: center'>${parseStat(stats3[i])}</td><td style="color: black; text-align: right">${parseData(data2[stats3[i]])}</td></tr>`
       }
     }
   }
@@ -70,24 +93,25 @@ toHTML = function(data, data2){
 //Checks whether 1 or 2 people and makes sure player 1 and player 2 can both show independently
 //Calls the toHTML function which returns the formatted data for HTML and appends it to the relevant container
 function viewData(mode, type, battletag1, battletag2){
+  // debugger
   if (battletag1){
     if (battletag2){
       $.when(
         window[mode](battletag1),
         window[mode](battletag2)
-      ).then(function(){
-        battletag1 === user.battletag ? $("#"+type).append(toHTML(user[type], otheruser()[type])) : $("#"+type).append(toHTML(otheruser()[type], user[type]))
+      ).then(()=>{
+        $("#"+type).append(toHTML(user[type], otheruser()[type], battletag1, battletag2))
       })
     }
     else {
       window[mode](battletag1).done(function(){
-        $("#"+type).append(toHTML(user[type], null))
+        $("#"+type).append(toHTML(user[type], null, battletag1, battletag2))
       })
     }
   }
   else{
     window[mode](battletag2).done(function(){
-      $("#"+type).append(toHTML(user[type], null))
+      $("#"+type).append(toHTML(user[type], null, battletag1, battletag2))
     })
   }
 }
@@ -116,9 +140,6 @@ function router(toDo){
   }
   else if (input2 !== ""){
     viewData(mode, toDo, input2, null)
-  }
-  else {
-    console.log("Nobody home")
   }
 
 }
