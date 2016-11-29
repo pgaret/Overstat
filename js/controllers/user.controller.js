@@ -25,6 +25,7 @@ parseStat = function(stat){
   return stat
 }
 
+// Take data round to two decimal places if not a whole number. And comma separator for values greate than 1000.
 parseData = function(data){
   var parts= String(+parseFloat(data).toFixed(2)).split(".")
   parts = String(parts[0]).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
@@ -44,15 +45,15 @@ toHTML = function(data, data2){
       str += `<tr><td>${parseStat(stat)}</td><td>${parseData(data[stat])}</td></tr>`
     }
   }
-  //Display the stats - if one user has a stat the other doesn't, display zero.
-  //Otherwise, color the stat appropriately based on the comparison
+  //Display the stats - if one user has a stat the other doesn't, display zero, and color is black.
+  //Otherwise, color the stat appropriately based on the comparison.
   else{
     for (stat in data){
       if (data[stat] === undefined){
-        str += `<tr><td style="color: red;">0</td><td>${parseStat(stat)}</td><td style="color: green;">${data2[stat]}</td></tr>`
+        str += `<tr><td style="color: black;">0</td><td>${parseStat(stat)}</td><td style="color: black;">${data2[stat]}</td></tr>`
       }
       else if (data2[stat] === undefined){
-        str += `<tr><td style="color: green;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: red;">0</td></tr>`
+        str += `<tr><td style="color: black;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: black;">0</td></tr>`
       }
       else if (data[stat] > data2[stat]){
         str += `<tr><td style="color: green;">${parseData(data[stat])}</td><td>${parseStat(stat)}</td><td style="color: red;">${parseData(data2[stat])}</td></tr>`
@@ -131,6 +132,7 @@ function showVideo(mode){
     var vid_name = "css/CharacterVid/" + hero.toLowerCase() + ".webm"
   } else {
     var vid_name = $("#selectCharacter").val().toLowerCase()
+    // edge case for soldier: 76
     if (vid_name === "soldier: 76"){
       vid_name = "css/CharacterVid/soldier76.webm"
     } else {
