@@ -8,14 +8,6 @@
 // - toHTML executes the comparison and changes the text color
 // - the API returns some pretty weird strings (ie time can be 00:30, 30 minutes, )
 
-//Gets the most recently added user
-user = function(){
-  return Store.users[Store.users.length - 1]
-}
-//Gets the second most recently added user, for the 2-user use case
-otheruser = function(){
-  return Store.users[Store.users.length - 2]
-}
 
 //Stats come from the API with underscores instead of spaces, we fix that here for display purposes
 parseStat = function(stat){
@@ -98,21 +90,21 @@ function viewData(mode, type, battletag1, battletag2){
   if (battletag1){
     if (battletag2){
       $.when(
-        window[mode](battletag1),
-        window[mode](battletag2)
+        window[mode](battletag1, battletag1),
+        window[mode](battletag2, battletag1)
       ).then(()=>{
-        $("#"+type).append(toHTML(user[type], otheruser()[type], battletag1, battletag2))
+        $("#"+type).append(toHTML(Store.user[type], Store.otheruser[type], battletag1, battletag2))
       })
     }
     else {
       window[mode](battletag1).done(function(){
-        $("#"+type).append(toHTML(user[type], null, battletag1, battletag2))
+        $("#"+type).append(toHTML(Store.user[type], null, battletag1, battletag2))
       })
     }
   }
   else{
     window[mode](battletag2).done(function(){
-      $("#"+type).append(toHTML(user[type], null, battletag1, battletag2))
+      $("#"+type).append(toHTML(Store.otheruser[type], null, battletag1, battletag2))
     })
   }
 }
