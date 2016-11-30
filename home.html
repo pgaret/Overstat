@@ -13,11 +13,23 @@
        <div id="userForm">
          <input class="battletags" id="battletag1" type="text" placeholder="Battletag 1"></input>
          <input class="battletags" id="battletag2" type="text" placeholder="Battletag 2"></input>
+         <button id="myBtn">Help</button>
+         <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">×</span>
+            <p>Please enter one or two battletags with username and number separated by a -. <br><br> To see data please press either one of the average stats, overall stats, or character stats
+              buttons. <br><br> To select as different character, please use the drop down to the left of the character data button.
+            </p>
+          </div>
+
+        </div>
          <br><br>
 
-         <button id="routeButton" class="btn btn-default" onclick="router('average_data')">Average Data</button>
-         <button id="routeButton" class="btn btn-default" onclick="router('game_data')">Aggregate Data</button>
-         <button id="routeButton" class="btn btn-default" onclick="router('character_data')">Character Data</button>
+         <button id="routeButton" class="btn btn-default" onclick="router('average_data')">Average Stats</button>
+         <button id="routeButton" class="btn btn-default" onclick="router('game_data')">Overall Stats</button>
+         <button id="routeButton" class="btn btn-default" onclick="router('character_data')">Character Stats</button>
 
          <select id="selectCharacter" class="dropbtn"><option>Ana</option><option>Bastion</option>
            <option>D.VA</option><option>Genji</option><option>Hanzo</option><option>Junkrat</option>
@@ -50,6 +62,32 @@
     <script src="js/store.js" charset="utf-8"></script>
     <script src="js/app.js" charset="utf-8"></script>
     <script src="js/controllers/user.controller.js" charset="utf-8"></script>
+    <script>
+      // Get the modal
+      var modal = document.getElementById('myModal');
 
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks the button, open the modal
+      btn.onclick = function() {
+          modal.style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+          modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+      }
+</script>
   </body>
 </html>
