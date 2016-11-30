@@ -32,6 +32,7 @@ parseData = function(data){
   return parts
 }
 
+//Take keys from object and put into an array so we can call sort on it later on (to show stats alphabetically.)
 statsToArr = function(data) {
   stats = []
   for (dat in data) {
@@ -51,17 +52,16 @@ toHTML = function(data, data2, b1, b2){
   let finalStats2 = statsToArr(data).sort()
   // console.log(b2)
   let str = "";
-  // debugger
   //If there is only one user, display in two columns the stats and values, in black
   if (!data2){
     str += `<div class="displaybattletag">${b1}</div><table>`
-    for (let i = 0; i < stats.length; i++){
+    for (let i = 0; i < finalStats.length; i++){
       str += `<tr><td style='text-align: left'>${parseStat(finalStats[i])}</td><td style='text-align: right'>${parseData(data[finalStats[i]])}</td></tr>`
     }
   }
   else if (!data) {
     str += `<div class="displaybattletag">${b2}</div><table>`
-      for (let i = 0; i < stats2.length; i++){
+      for (let i = 0; i < finalStats2.length; i++){
         str += `<tr><td style='text-align: left'>${parseStat(finalStats2[i])}</td><td style='text-align: right'>${parseData(data2[finalStats2[i]])}</td></tr>`
     }
   }
@@ -95,7 +95,6 @@ toHTML = function(data, data2, b1, b2){
 //Checks whether 1 or 2 people and makes sure player 1 and player 2 can both show independently
 //Calls the toHTML function which returns the formatted data for HTML and appends it to the relevant container
 function viewData(mode, type, battletag1, battletag2){
-  // debugger
   if (battletag1){
     if (battletag2){
       $.when(
@@ -124,7 +123,6 @@ function router(toDo){
   input1 = $("#battletag1").val()
   input2 = $("#battletag2").val()
 
-  // debugger
   if (toDo === 'character_data'){
     mode = "heroAdapter"
     showVideo("hero")
@@ -147,7 +145,6 @@ function router(toDo){
 }
 
 function showVideo(mode){
-  // debugger
   if (mode === "user")
   {
     let heroes = ["Ana","Bastion","D.VA","Genji","Hanzo","Junkrat","Lucio","McCree","Mei","Mercy","Pharah","Reaper","Reinhardt","Roadhog","soldier76","Symmetra","Torbjorn","Tracer","Widowmaker","Winston","Zarya","Zenyatta"]
