@@ -47,6 +47,8 @@ statsToArr = function(data) {
 toHTML = function(data, data2, b1, b2){
   let stats = statsToArr(data)
   let stats2 = statsToArr(data2)
+  let finalStats = statsToArr(data).sort()
+  let finalStats2 = statsToArr(data).sort()
   // console.log(b2)
   let str = "";
   // debugger
@@ -54,13 +56,13 @@ toHTML = function(data, data2, b1, b2){
   if (!data2){
     str += `<div class="displaybattletag">${b1}</div><table>`
     for (let i = 0; i < stats.length; i++){
-      str += `<tr><td style='text-align: left'>${parseStat(data[stats[i]])}</td><td style='text-align: right'>${parseData(data[stat])}</td></tr>`
+      str += `<tr><td style='text-align: left'>${parseStat(finalStats[i])}</td><td style='text-align: right'>${parseData(data[finalStats[i]])}</td></tr>`
     }
   }
   else if (!data) {
     str += `<div class="displaybattletag">${b2}</div><table>`
       for (let i = 0; i < stats2.length; i++){
-        str += `<tr><td style='text-align: left'>${parseStat(data2[stats2[i]])}</td><td style='text-align: right'>${parseData(data[stat])}</td></tr>`
+        str += `<tr><td style='text-align: left'>${parseStat(finalStats2[i])}</td><td style='text-align: right'>${parseData(data2[finalStats2[i]])}</td></tr>`
     }
   }
   //Display the stats - if one user has a stat the other doesn't, display zero, and color is black.
