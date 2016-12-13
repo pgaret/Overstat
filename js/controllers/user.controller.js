@@ -44,6 +44,7 @@ toHTML = function(data, data2, b1, b2){
   let finalStats2 = statsToArr(data).sort()
   // console.log(b2)
   let str = "";
+  // debugger
   //If there is only one user, display in two columns the stats and values, in black
   if (!data2){
     str += `<div class="displaybattletag">${b1}</div><table>`
@@ -104,7 +105,7 @@ function viewData(mode, type, battletag1, battletag2){
   }
   else{
     window[mode](battletag2).done(function(){
-      $("#"+type).append(toHTML(Store.otheruser[type], null, battletag1, battletag2))
+      $("#"+type).append(toHTML(Store.user[type], null, battletag1, battletag2))
     })
   }
 }
@@ -133,6 +134,7 @@ function router(toDo){
   else if (input2 !== ""){
     viewData(mode, toDo, input2, null)
   }
+
 
 }
 
